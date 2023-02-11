@@ -4,7 +4,7 @@ class Db {
 
     private $con;
     private $host = "localhost/ORCL";
-    private $username = "SYSTEM";
+    private $username = "ROZSA_ISTVAN";
     private $password = "aBC12345";
     private $statements = [];
     private $execute_status = false;
@@ -28,6 +28,8 @@ class Db {
                 oci_bind_by_name($stid, $key, $bind[$key]);
             }
         }
+        $this->execute_status = oci_execute($stid);
+        return $this->execute_status ? $stid : false;
     }
 
     public function insert($table, $array, &$bind = false, $returning = false){
@@ -69,7 +71,7 @@ class Db {
     }
 
     public function fetchArray($statement){
-        return oci_fetch_array($statement, OCI_BOTH);
+        return oci_fetch_array($statement, OCI_ASSOC);
     }
 
     public function fetchObject($statement){
