@@ -4,7 +4,7 @@ class Db {
 
     private $con;
     private $host = "localhost/ORCL";
-    private $username = "ROZSA_ISTVAN";
+    private $username = "SYSTEM";
     private $password = "aBC12345";
     private $statements = [];
     private $execute_status = false;
@@ -21,7 +21,7 @@ class Db {
         return $this->execute($sql, $bind);
     }
 
-    private function execute($sql, &$bind){
+    private function execute($sql, $bind = false){
         $stid = oci_parse($this->con, $sql);
         if($bind && is_array($bind)){
             foreach($bind as $key => $value){
@@ -29,10 +29,11 @@ class Db {
             }
         }
         $this->execute_status = oci_execute($stid);
+
         return $this->execute_status ? $stid : false;
     }
 
-    public function insert($table, $array, &$bind = false, $returning = false){
+    public function insert($table, $array, $bind = false, $returning = false){
         if(empty($array)) return false;
         $fields = array();
         $values = array();
@@ -48,13 +49,13 @@ class Db {
         return $result === false ? false : $result;
     }
 
-    public function delete($table, $condition, &$bind = false, $returing = false){
+    public function delete($table, $condition, $bind = false, $returing = false){
         $sql = "DELETE FROM $table WHERE $condition";
         $result = $this->execute($sql,$bind);
         return $result === false ? false : $result;
     }
 
-    public function update($table, $array, $condition, &$bind = false, $returning = false){
+    public function update($table, $array, $condition, $bind = false, $returning = false){
         if(empty($array)) return false;
         $fields = array();
         $values = array();
@@ -70,18 +71,16 @@ class Db {
         return $result === false ? false : $result;
     }
 
-    public function fetchArray($statement){
-        return oci_fetch_array($statement, OCI_ASSOC);
+    public function fetchAll($statement){
+        return oci_fetch_all($statement, $res, null, null, OCI_FETCHSTATEMENT_BY_ROW);
     }
 
     public function fetchObject($statement){
         return oci_fetch_object($statement);
     }
 
-    public function fetchRow($statement){
-        return oci_fetch_row($statement);
+    public function numRows($statement){
+        return oci_num_rows($statement);
     }
 }
-
-$dbh = new Db();
 
