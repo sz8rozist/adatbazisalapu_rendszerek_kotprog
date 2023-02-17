@@ -108,7 +108,7 @@ class Functions{
         </div>
     
         <div class="navbar-end">';
-        if(!empty($_SESSION) && $_SESSION["jogosultsag"] == 0){
+        if(!empty($_SESSION) && isset($_SESSION["jogosultsag"]) && $_SESSION["jogosultsag"] == 0){
           echo '<div class="navbar-item has-dropdown is-hoverable">
           <a href="#" class="navbar-link">
             '.$_SESSION["username"].'
