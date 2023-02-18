@@ -75,6 +75,10 @@ class Db {
         return oci_fetch_all($statement, $res, null, null, OCI_FETCHSTATEMENT_BY_ROW);
     }
 
+    public function fetchArray($statement){
+        return oci_fetch_array($statement, OCI_ASSOC);
+    }
+
     public function fetchObject($statement){
         return oci_fetch_object($statement);
     }
