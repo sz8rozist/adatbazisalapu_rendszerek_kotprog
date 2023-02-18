@@ -125,9 +125,9 @@ class Functions{
         }else{
           echo ' <div class="navbar-item">
           <div class="buttons">
-            <a class="button is-info">
+            <button class="button is-info js-modal-trigger" data-target="modal-signup" aria-haspopup="true">
               <strong>Sign up</strong>
-            </a>
+            </button>
             <button class="button is-primary js-modal-trigger" data-target="modal-login" aria-haspopup="true">Login</button>
           </div>
         </div>';

@@ -25,7 +25,17 @@ class User{
     }
 
     public function signup($username, $password){
-
+        $check_user_query = $this->db->select("SELECT username FROM users WHERE username = :username",array(":username" => $username));
+        $result = $this->db->fetchAll($check_user_query);
+        $rows = $this->db->numRows($check_user_query);
+        if($rows == 0){
+            //autoincrement id-t meg kell nézni.
+            $signup = $this->db->insert("users",array("id" => ":id","username"=> ":username","password" => ":password","jogosultsag" => ":jogosultsag"), array(":id" => 3,":username" => $username, ":password" => $password, ":jogosultsag" => 0));
+            return $signup;
+        }else{
+            //Létezik ilyen felhasználónév már.
+            return false;
+        }
     }
 
     public function logout(){
