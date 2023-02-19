@@ -95,6 +95,8 @@ function template_footer()
 
 function searchBox(){
   $szemely_szam = isset($_POST["szemely_szam"]) ? $_POST["szemely_szam"] : 1;
+  $egyiranyuTab = 'onclick=openTab(event, "egyiranyu")';
+  $odaVisszaTab = 'onclick=openTab(event, "oda-vissza")';
   echo '<div class="search">
   <section class="section is-small">
     <h1 class="title has-text-centered has-text-white">
@@ -105,10 +107,10 @@ function searchBox(){
     <div class="tabs is-toggle">
       <div class="container">
         <ul>
-          <li class="tab tab-is-active" onclick="openTab(event,"egyiranyu")">
+          <li class="tab tab-is-active" onclick="openTab(event,egyiranyu)" >
             <a>Egyirányú</a>
           </li>
-          <li class="tab" onclick="openTab(event,"oda-vissza")">
+          <li class="tab" onclick="openTab(event,odaVissza)">
             <a>Oda-vissza</a>
           </li>
         </ul>
@@ -169,7 +171,7 @@ function searchBox(){
           </div>
           </form>
         </div>
-        <div id="oda-vissza" class="content-tab" style="display: none">
+        <div id="odaVissza" class="content-tab" style="display: none">
           <form action="search.php" method="post">
           <div class="field is-horizontal">
             <div class="field-body">
