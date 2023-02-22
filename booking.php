@@ -37,6 +37,33 @@ searchBox();
                                 </div>
                             </div>
                         </div>
+                        <div class="section">
+                            <p>Kérem válasszon poggyászt</p>
+                            <?php
+                            $poggyasz = new Poggyasz();
+                            $poggyaszok = $poggyasz->getPoggyaszok();
+                            ?>
+                            <div class="columns">
+                                <?php foreach ($poggyaszok as $p) : ?>
+                                    <div class="column">
+                                        <?php echo $p["ELNEVEZES"] ?>
+                                    </div>
+                                    <div class="column">
+                                        <?php echo $p["SULY"] ?> kg
+                                    </div>
+                                    <div class="column">
+                                        <?php echo $p["MERET"] ?>
+                                    </div>
+                                    <div class="column">
+                                        <?php echo $p["AR"] ?> Ft
+                                    </div>
+                                    <div class="col">
+                                        <input type="number" name="poggyasz[]" min="0" class="input" value="0" id="">
+                                    </div>
+                                <?php endforeach; ?>
+
+                            </div>
+                        </div>
                     </nav>
                 <?php endfor; ?>
             </div>
@@ -45,13 +72,13 @@ searchBox();
                     <p class="panel-heading">
                         Összegzés
                     </p>
-                    <?php for($i = 1; $i <= $_POST["szemely_szam"]; $i ++): ?>
-                    <p class="panel-block">
-                        <span class="panel-icon">
-                            <i class="fa-solid fa-ticket"></i>
-                        </span>
-                        <?php echo $i . " - " . $_POST["ar"]; ?> Ft
-                    </p>
+                    <?php for ($i = 1; $i <= $_POST["szemely_szam"]; $i++) : ?>
+                        <p class="panel-block">
+                            <span class="panel-icon">
+                                <i class="fa-solid fa-ticket"></i>
+                            </span>
+                            <?php echo $i . " - " . $_POST["ar"]; ?> Ft
+                        </p>
                     <?php endfor; ?>
                     <p class="panel-block">
                         <span class="panel-icon"><i class="fa-solid fa-money-check"></i></span>
