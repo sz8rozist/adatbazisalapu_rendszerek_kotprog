@@ -3,10 +3,9 @@
 class Db {
 
     private $con;
-    private $host = "localhost/ORCL";
+    private $host = "localhost/xe";
     private $username = "SYSTEM";
-    private $password = "aBC12345";
-    private $statements = [];
+    private $password = "oracle";
     private $execute_status = false;
 
     function __construct() {
@@ -29,11 +28,10 @@ class Db {
             }
         }
         $this->execute_status = oci_execute($stid);
-
         return $this->execute_status ? $stid : false;
     }
 
-    public function insert($table, $array, $bind = false, $returning = false){
+    public function insert($table, $array, $bind = false){
         if(empty($array)) return false;
         $fields = array();
         $values = array();
@@ -43,30 +41,25 @@ class Db {
         }
         $fields = implode(",",$fields);
         $values = implode(",",$values);
-        $ret = "";
         $sql = "INSERT INTO $table ($fields) VALUES($values)";
         $result = $this->execute($sql, $bind);
         return $result === false ? false : $result;
     }
 
-    public function delete($table, $condition, $bind = false, $returing = false){
+    public function delete($table, $condition, $bind = false){
         $sql = "DELETE FROM $table WHERE $condition";
         $result = $this->execute($sql,$bind);
         return $result === false ? false : $result;
     }
 
-    public function update($table, $array, $condition, $bind = false, $returning = false){
+    public function update($table, $array, $condition, $bind = false){
         if(empty($array)) return false;
-        $fields = array();
         $values = array();
         foreach($array as $key => $value){
-            $fields[] = $key;
-            $values[] = $value;
+            $val[] = $key . " = " . $value;
         }
-        $fields = implode(",",$fields);
-        $values = implode(",",$values);
-        $ret = "";
-        $sql = "UPDATE $table SET $fields WHERE $condition";
+        $values =  implode(", ", $val);
+        $sql = "UPDATE $table SET $values WHERE $condition";
         $result = $this->execute($sql, $bind);
         return $result === false ? false : $result;
     }

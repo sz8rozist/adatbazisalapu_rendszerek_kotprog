@@ -13,7 +13,7 @@ dashboardNavbar();
         <div class="columns is-variable is-desktop">
           <div class="column">
             <h1 class="title">
-              Dashboard
+              Üdvözöllek <?php echo $_SESSION["username"]; ?>!
             </h1>
           </div>
         </div>

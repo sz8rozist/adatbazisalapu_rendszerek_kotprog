@@ -1,6 +1,6 @@
 <?php
-
-function template_header($title){
+function template_header($title)
+{
   echo '
   <!DOCTYPE html>
 <html lang="hu">
@@ -12,7 +12,7 @@ function template_header($title){
     <link rel="stylesheet" href="css/bulma.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-    <title>Air ticket booking - '.$title.'</title>
+    <title>Air ticket booking - ' . $title . '</title>
   </head>
   <body>
     <div class="modal" id="modal-login">
@@ -75,12 +75,12 @@ function template_header($title){
         </footer>
       </div>
     </div>
-  ';  
+  ';
 }
 
 function template_footer()
 {
-    echo '
+  echo '
     <script
     src="js/jquery.min.js"
     ></script>
@@ -88,15 +88,64 @@ function template_footer()
     <script src="js/modal.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/tab.js"></script>
+    <script src="js/idopont.js"></script>
     </body>
     </html>
 ';
 }
 
-function searchBox(){
+function searchBox()
+{
+  $repter = new Repuloter();
+  $varosok = $repter->getVarosok();
   $szemely_szam = isset($_POST["szemely_szam"]) ? $_POST["szemely_szam"] : 1;
-  $egyiranyuTab = 'onclick=openTab(event, "egyiranyu")';
-  $odaVisszaTab = 'onclick=openTab(event, "oda-vissza")';
+
+  $honnan_select = "<select class='is-fullwidth' name='indulasi_repuloter_id'>";
+  if (empty($varosok)) {
+    $honnan_select .= "<option>Nincs rögzítve a rendszerben elérhető város</option>";
+  } else {
+    foreach ($varosok as $varos) {
+      if(isset($_POST["indulasi_repuloter_id"]) && $_POST["indulasi_repuloter_id"] == $varos["ID"]){
+        $honnan_select .= "<option selected value='" . $varos["ID"] . "'>" . $varos["VAROS"] . "</option>";
+      }else{
+        $honnan_select .= "<option value='" . $varos["ID"] . "'>" . $varos["VAROS"] . "</option>";
+      }
+    }
+  }
+  $honnan_select .= "</select>";
+
+  $hova_select = "<select class='is-fullwidth' name='erkezesi_repuloter_id'>";
+  if (empty($varosok)) {
+    $hova_select .= "<option>Nincs rögzítve a rendszerben elérhető város</option>";
+  } else {
+    foreach ($varosok as $varos) {
+      if(isset($_POST["erkezesi_repuloter_id"]) && $_POST["erkezesi_repuloter_id"] == $varos["ID"]){
+        $hova_select .= "<option selected value='" . $varos["ID"] . "'>" . $varos["VAROS"] . "</option>";
+      }else{
+        $hova_select .= "<option value='" . $varos["ID"] . "'>" . $varos["VAROS"] . "</option>";
+      }
+    }
+  }
+  $hova_select .= "</select>";
+
+  $jaratok = new Legitarsasag();
+  $osztalyok = $jaratok->getJaratOsztaly();
+
+  $osztaly_select = "<select class='is-fullwidth' name='osztaly'>";
+  if (empty($osztalyok)) {
+    $osztaly_select .= "<option>Nincs rögzítve a rendszerben elérhető repülőjárat</option>";
+  } else {
+    foreach ($osztalyok as $osztaly) {
+      if(isset($_POST["osztaly"]) && $_POST["osztaly"] == $osztaly["OSZTALY"]){
+        $osztaly_select .= "<option selected value='" . $osztaly["OSZTALY"] . "'>" . $osztaly["OSZTALY"] . "</option>";
+      }else{
+        $osztaly_select .= "<option value='" . $osztaly["OSZTALY"] . "'>" . $osztaly["OSZTALY"] . "</option>";
+      }
+    }
+  }
+  $osztaly_select .= "</select>";
+  $indulasi_datum_val = isset($_POST["indulasi_datum"]) ? $_POST["indulasi_datum"] : "";
+  $erkezesi_datum_val = isset($_POST["erkezesi_datum"]) ? $_POST["erkezesi_datum"] : "";
   echo '<div class="search">
   <section class="section is-small">
     <h1 class="title has-text-centered has-text-white">
@@ -124,27 +173,19 @@ function searchBox(){
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                    <select name="honnan">
-                      <option>Honnan?</option>
-                      <option>Marketing</option>
-                      <option>Sales</option>
-                    </select>
+                   '.$honnan_select.'
                   </div>
                 </div>
               </div>
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                    <select name="hova">
-                      <option>Hova?</option>
-                      <option>Marketing</option>
-                      <option>Sales</option>
-                    </select>
+                    '.$hova_select.'
                   </div>
                 </div>
               </div>
               <div class="field">
-                <input class="input" name="indulasi_datum" type="date" placeholder="Name" />
+                <input class="input" value="'.$indulasi_datum_val.'" name="indulasi_datum" type="date" placeholder="Name" />
               </div>
               <div class="field">
                 <input
@@ -152,17 +193,13 @@ function searchBox(){
                   type="text"
                   name="szemely_szam"
                   placeholder="Személyek száma"
-                  value="'.$szemely_szam.'"
+                  value="' . $szemely_szam . '"
                 />
               </div>
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                    <select name="osztaly">
-                      <option>Fedélzeti osztály?</option>
-                      <option>Marketing</option>
-                      <option>Sales</option>
-                    </select>
+                    '.$osztaly_select.'
                   </div>
                 </div>
               </div>
@@ -178,30 +215,22 @@ function searchBox(){
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                    <select name="honnan">
-                      <option>Honnan?</option>
-                      <option>Marketing</option>
-                      <option>Sales</option>
-                    </select>
+                   '.$honnan_select.'
                   </div>
                 </div>
               </div>
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                    <select name="hova">
-                      <option>Hova?</option>
-                      <option>Marketing</option>
-                      <option>Sales</option>
-                    </select>
+                    '.$hova_select.'
                   </div>
                 </div>
               </div>
               <div class="field">
-                <input class="input" name="indulasi_datum" type="date" placeholder="Name" />
+                <input class="input" value="'.$indulasi_datum_val.'" name="indulasi_datum" type="date" placeholder="Name" />
               </div>
               <div class="field">
-                <input class="input" type="date" name="erkezesi_datum" placeholder="Email" value="" />
+                <input class="input" type="date" value="'.$erkezesi_datum_val.'" name="erkezesi_datum" placeholder="Email" value="" />
               </div>
               <div class="field">
                 <input
@@ -215,11 +244,7 @@ function searchBox(){
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                    <select name="osztaly">
-                      <option>Fedélzeti osztály?</option>
-                      <option>Marketing</option>
-                      <option>Sales</option>
-                    </select>
+                  '.$osztaly_select.'
                   </div>
                 </div>
               </div>
@@ -234,12 +259,13 @@ function searchBox(){
 ';
 }
 
-   function dashboardNavbar(){
-        if(!empty($_SESSION)){
-            echo '<nav class="navbar box-shadow-y">
+function dashboardNavbar()
+{
+  if (!empty($_SESSION)) {
+    echo '<nav class="navbar box-shadow-y">
             <div class="navbar-brand">
               <a href="#" class="navbar-item has-text-weight-bold has-text-black">
-                Admin Dashboard
+                Admin vezérlőpult
               </a>
               <a
                 role="button"
@@ -254,16 +280,37 @@ function searchBox(){
             </div>
             <div class="navbar-menu has-background-white">
               <div class="navbar-start">
-                <a href="#" class="navbar-item">
-                     Home
+                <a href="dashboard.php" class="navbar-item">
+                     Kezdőlap
                 </a>
+                <div class="navbar-item has-dropdown is-hoverable">
+                <a href="legitarsasag.php" class="navbar-link">
+                Légitársaság
+              </a>
+                <div class="navbar-dropdown is-right">
+                  <a href="legitarsasag.php" class="navbar-item">
+                    Légitársaságok
+                  </a>
+                  <a href="jaratok.php" class="navbar-item">Járatok</a>
+                </div>
+              </div>
+                <a href="repuloter.php" class="navbar-item">
+                Repülőterek
+              </a>
                 <a href="#" class="navbar-item">
-                  About
+                  Foglalások
                 </a>
-                <a href="#" class="navbar-item">
-                  Features
+                <div class="navbar-item has-dropdown is-hoverable">
+                <a href="#" class="navbar-link">
+                  Poggyász
                 </a>
-                <a href="#" class="navbar-item">Pricing</a>
+                <div class="navbar-dropdown is-right">
+                  <a href="poggyasz.php" class="navbar-item">
+                    Poggyászok
+                  </a>
+                  <a href="logout.php" class="navbar-item">Feladott poggyászok</a>
+                </div>
+              </div>
               </div>
               <div class="navbar-end">
                 <a href="#" class="navbar-item">
@@ -271,10 +318,10 @@ function searchBox(){
                 </a>
                 <div class="navbar-item has-dropdown is-hoverable">
                   <a href="#" class="navbar-link">
-                    '.$_SESSION["username"].'
+                    ' . $_SESSION["username"] . '
                   </a>
                   <div class="navbar-dropdown is-right">
-                    <a href="admin/profile.php" class="navbar-item">
+                    <a href="profile.php" class="navbar-item">
                       Profile
                     </a>
                     <a href="#" class="navbar-item">Felhasználók</a>
@@ -286,11 +333,12 @@ function searchBox(){
             </div>
           </nav>
         ';
-        }
-    }
+  }
+}
 
-     function navbar(){
-      echo '<nav class="navbar is-info" role="navigation" aria-label="main navigation">
+function navbar()
+{
+  echo '<nav class="navbar is-info" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">
           <img src="img/logo.png" >
@@ -337,10 +385,10 @@ function searchBox(){
         </div>
     
         <div class="navbar-end">';
-        if(!empty($_SESSION) && isset($_SESSION["jogosultsag"]) && $_SESSION["jogosultsag"] == 0){
-          echo '<div class="navbar-item has-dropdown is-hoverable">
+  if (!empty($_SESSION) && isset($_SESSION["jogosultsag"]) && $_SESSION["jogosultsag"] == 0) {
+    echo '<div class="navbar-item has-dropdown is-hoverable">
           <a href="#" class="navbar-link">
-            '.$_SESSION["username"].'
+            ' . $_SESSION["username"] . '
           </a>
           <div class="navbar-dropdown is-right">
             <a href="#" class="navbar-item">
@@ -351,8 +399,8 @@ function searchBox(){
             <a href="logout.php" class="navbar-item">Kilépés</a>
           </div>
         </div>';
-        }else{
-          echo ' <div class="navbar-item">
+  } else {
+    echo ' <div class="navbar-item">
           <div class="buttons">
             <button class="button is-info js-modal-trigger" data-target="modal-signup" aria-haspopup="true">
               <strong>Sign up</strong>
@@ -360,9 +408,9 @@ function searchBox(){
             <button class="button is-primary js-modal-trigger" data-target="modal-login" aria-haspopup="true">Login</button>
           </div>
         </div>';
-        }
-         echo '
+  }
+  echo '
         </div>
       </div>
     </nav>';
-    }
+}
