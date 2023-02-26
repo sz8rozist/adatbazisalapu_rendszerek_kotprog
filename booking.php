@@ -7,7 +7,6 @@ if (isset($_POST["booking"])) {
 }
 template_header("Járat keresés");
 navbar();
-searchBox();
 ?>
 <div class="container section">
     <form action="booking_checkout.php" method="post">
