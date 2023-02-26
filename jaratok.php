@@ -6,7 +6,7 @@ template_header("Vezérlőpult");
 dashboardNavbar();
 
 $legitarsasag = new Legitarsasag();
-$jaratok = $legitarsasag->getJaratok();
+$jaratok = $legitarsasag->adminPanelJaratok();
 
 if(isset($_GET["delete"])){
     $legitarsasag->deleteRepulo($_GET["delete"]);
@@ -46,7 +46,7 @@ if(isset($_GET["delete"])){
                     <?php if (!empty($jaratok)) : ?>
                         <?php foreach ($jaratok as $jarat) : ?>
                             <tr>
-                                <td><img src="<?php echo (isset($row) && !is_null($row->IMG)) ? "uploads/". $jarat["LOGO"] : "img/missing_image.png" ?>?>" width="30" alt="logo" title="A légitársaság logoja"></td>
+                                <td><img src="<?php echo (isset($jarat) && !is_null($jarat["LOGO"])) ? "uploads/". $jarat["LOGO"] : "img/missing_image.png" ?>?>" width="30" alt="logo" title="A légitársaság logoja"></td>
                                 <td><?php echo $jarat["LEGITARSASAG"]; ?></td>
                                 <td><?php echo $jarat["INDULO_REPTER"]; ?></td>
                                 <td><?php echo $jarat["ERKEZO_REPTER"]; ?></td>

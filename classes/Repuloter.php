@@ -50,7 +50,7 @@ class Repuloter{
         if(empty($nev) || empty($varos) || empty($orszag)){
             $msg = "Minden mező kitöltése kötelező!";
         }else{
-            $insert = $this->db->insert("repuloter",array("id" => ":id","nev"=> ":nev","varos" => ":varos", "orszag" => ":orszag"), array(":id" => 1,":nev" => $nev, ":varos" => $varos, ":orszag" => $orszag));
+            $insert = $this->db->insert("repuloter",array("nev"=> ":nev","varos" => ":varos", "orszag" => ":orszag"), array(":nev" => $nev, ":varos" => $varos, ":orszag" => $orszag));
             if(!$insert){
                 $msg = "Sikertelen hozzáadása";
             }

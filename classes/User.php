@@ -11,12 +11,12 @@ class User{
     }
 
     public function signin($username, $password){
-        $query = $this->db->select("SELECT * FROM users WHERE username LIKE :username AND password LIKE :password", array(":username" => $username, ":password" => $password));
+        $query = $this->db->select("SELECT * FROM felhasznalo WHERE felhasznalonev LIKE :username AND jelszo LIKE :password", array(":username" => $username, ":password" => $password));
         $user = $this->db->fetchObject($query);
         if($user){
             //Sikeres
             $this->loggedUserId = $user->ID;
-            $this->loggedUsername = $user->USERNAME;
+            $this->loggedUsername = $user->FELHASZNALONEV;
             $this->jogosultsag = $user->JOGOSULTSAG;
             return 1;
         }else{
@@ -25,12 +25,12 @@ class User{
     }
 
     public function signup($username, $password){
-        $check_user_query = $this->db->select("SELECT username FROM users WHERE username = :username",array(":username" => $username));
+        $check_user_query = $this->db->select("SELECT felhasznalonev FROM felhasznalo WHERE felhasznalonev = :username",array(":username" => $username));
         $result = $this->db->fetchAll($check_user_query);
         $rows = $this->db->numRows($check_user_query);
         if($rows == 0){
             //autoincrement id-t meg kell nézni.
-            $signup = $this->db->insert("users",array("id" => ":id","username"=> ":username","password" => ":password","jogosultsag" => ":jogosultsag"), array(":id" => 3,":username" => $username, ":password" => $password, ":jogosultsag" => 0));
+            $signup = $this->db->insert("felhasznalo",array("felhasznalonev"=> ":username","jelszo" => ":password","jogosultsag" => ":jogosultsag"), array(":username" => $username, ":password" => $password, ":jogosultsag" => 0));
             return $signup;
         }else{
             //Létezik ilyen felhasználónév már.

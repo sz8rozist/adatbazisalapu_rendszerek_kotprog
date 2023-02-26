@@ -12,14 +12,14 @@ $repterek = $repter->getRepterek();
 $legitarsasagok = $legitarsasag->getLegitarsasagok();
 
 if (isset($_POST["new_jarat"])) {
-    $response = json_decode($legitarsasag->insertRepulo($_POST["model"], $_POST["osztaly"], $_POST["max_ferohely"], $_POST["legitarsasag_id"], $_POST["indulo_repter_id"], $_POST["erkezo_repter_id"], $_POST['indulasi_datum'], $_POST["indulasi_ido"], $_POST["erkezesi_datum"], $_POST["erkezesi_ido"]));
-    if (empty($response->msg)) header("location: repuloter.php");
+    $response = json_decode($legitarsasag->insertRepulo($_POST["model"], $_POST["osztaly"], $_POST["max_ferohely"], $_POST["legitarsasag_id"], $_POST["indulo_repter_id"], $_POST["erkezo_repter_id"], $_POST['indulasi_datum'], $_POST["indulasi_ido"], $_POST["erkezesi_datum"], $_POST["erkezesi_ido"], $_POST["jegy_ar"]));
+    if (empty($response->msg)) header("location: jarat.php");
 }
 if (isset($_GET["id"])) {
     $row = $legitarsasag->getRepuloById($_GET["id"]);
     if (isset($_POST["edit_jarat"])) {
-        $response = json_decode($legitarsasag->editRepulo($_POST["model"], $_POST["osztaly"], $_POST["max_ferohely"], $_POST["legitarsasag_id"], $_POST["indulo_repter_id"], $_POST["erkezo_repter_id"], $_POST['indulasi_datum'], $_POST["indulasi_ido"], $_POST["erkezesi_datum"], $_POST["erkezesi_ido"], $_GET["id"]));
-        if (empty($response->msg)) header("location: repuloter.php");
+        $response = json_decode($legitarsasag->editRepulo($_POST["model"], $_POST["osztaly"], $_POST["max_ferohely"], $_POST["legitarsasag_id"], $_POST["indulo_repter_id"], $_POST["erkezo_repter_id"], $_POST['indulasi_datum'], $_POST["indulasi_ido"], $_POST["erkezesi_datum"], $_POST["erkezesi_ido"],$_POST["jegy_ar"], $_GET["id"]));
+        if (empty($response->msg)) header("location: jarat.php");
     }
 }
 ?>
@@ -48,6 +48,12 @@ if (isset($_GET["id"])) {
                         </div>
                     </div>
                     <div class="field">
+                        <label class="label">Jegy ár</label>
+                        <div class="control">
+                            <input class="input" placeholder="25000" value="<?php echo (isset($row)) ? $row->JEGY_AR : ""; ?>" type="text" name="jegy_ar">
+                        </div>
+                    </div>
+                    <div class="field">
                         <label class="label">Férőhelyek száma</label>
                         <div class="control">
                             <input class="input" placeholder="150" value="<?php echo (isset($row)) ? $row->MAX_FEROHELY : ""; ?>" type="text" name="max_ferohely">
@@ -68,7 +74,7 @@ if (isset($_GET["id"])) {
                         <div class="control">
                             <select name="indulo_repter_id" id="" class="input">
                                 <?php foreach($repterek as $t): ?>
-                                    <option <?php echo (isset($row) && $row->INDULO_REPTER_ID == $t["ID"]) ? "selected" : ""; ?> value="<?php echo $t["ID"] ?>"><?php echo $t["NEV"] ?></option>
+                                    <option <?php echo (isset($row) && $row->INDULO_REPULOTER_ID == $t["ID"]) ? "selected" : ""; ?> value="<?php echo $t["ID"] ?>"><?php echo $t["NEV"] ?></option>
                                     <?php endforeach; ?>
                             </select>
                         </div>
@@ -78,7 +84,7 @@ if (isset($_GET["id"])) {
                         <div class="control">
                             <select name="erkezo_repter_id" id="" class="input">
                                 <?php foreach($repterek as $t): ?>
-                                    <option <?php echo (isset($row) && $row->ERKEZO_REPTER_ID == $t["ID"]) ? "selected" : ""; ?> value="<?php echo $t["ID"] ?>"><?php echo $t["NEV"] ?></option>
+                                    <option <?php echo (isset($row) && $row->ERKEZO_REPULOTER_ID == $t["ID"]) ? "selected" : ""; ?> value="<?php echo $t["ID"] ?>"><?php echo $t["NEV"] ?></option>
                                     <?php endforeach; ?>
                             </select>
                         </div>
@@ -86,7 +92,7 @@ if (isset($_GET["id"])) {
                     <div class="field">
                         <label class="label">Indulási dátum</label>
                         <div class="control">
-                            <input class="input"  value="<?php echo (isset($row)) ? $row->INDULASI_DATUM : ""; ?>" type="date" name="indulasi_datum">
+                            <input class="input"  value="<?php echo (isset($row)) ? date("Y-m-d",strtotime($row->INDULASI_DATUM)) : ""; ?>" type="date" name="indulasi_datum">
                         </div>
                     </div>
                     <div class="field">
@@ -98,7 +104,7 @@ if (isset($_GET["id"])) {
                     <div class="field">
                         <label class="label">Érkezési dátum</label>
                         <div class="control">
-                            <input class="input"  value="<?php echo (isset($row)) ? $row->ERKEZESI_DATUM : ""; ?>" type="date" name="erkezesi_datum">
+                            <input class="input"  value="<?php echo (isset($row)) ? date("Y-m-d",strtotime($row->ERKEZESI_DATUM)) : ""; ?>" type="date" name="erkezesi_datum">
                         </div>
                     </div>
                     <div class="field">

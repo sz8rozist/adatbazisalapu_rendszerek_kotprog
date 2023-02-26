@@ -38,7 +38,7 @@ class Legitarsasag
             move_uploaded_file($files["img"]["tmp_name"], $target);
         }
         if (!empty($nev)) {
-            $insert = $this->db->insert("legitarsasag", array("id" => ":id", "nev" => ":nev", "img" => ":img"), array(":id" => 2, ":nev" => $nev, ":img" => $imgName));
+            $insert = $this->db->insert("legitarsasag", array("nev" => ":nev", "img" => ":img"), array(":nev" => $nev, ":img" => $imgName));
             if (!$insert) {
                 $msg = "Sikertelen hozzáadása";
             }
@@ -96,12 +96,12 @@ class Legitarsasag
         foreach($search as $key => $value){
             if(!is_null($value) && $key != "szemely_szam"){
                 $conditions .= $key ." = :" . $key . " AND ";
-                $bind[":".$key] = $value;
+                $bind[":".$key] = ($key == "indulasi_datum" || $key == "erkezesi_datum") ? date("y-M-d", strtotime($value)) : $value;
             }
         }
         //végéről az AND szó törlése
         $conditions = rtrim($conditions, " AND");
-        $query = $this->db->select("SELECT repulo.*, legitarsasag.nev as legitarsasag, legitarsasag.img as logo, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.indulo_repter_id) as indulo_repter, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.erkezo_repter_id) as erkezo_repter FROM repulo INNER JOIN legitarsasag ON repulo.legitarsasag_id = legitarsasag.id ".$conditions,$bind);
+        $query = $this->db->select("SELECT repulo.*, legitarsasag.nev as legitarsasag, legitarsasag.img as logo, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.indulo_repuloter_id) as indulo_repter, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.erkezo_repuloter_id) as erkezo_repter FROM repulo INNER JOIN legitarsasag ON repulo.legitarsasag_id = legitarsasag.id ".$conditions,$bind);
         $jaratok = array();
         while ($row = $this->db->fetchArray($query)) {
             array_push($jaratok, $row);
@@ -109,17 +109,26 @@ class Legitarsasag
         return $jaratok;
     }
 
-    public function insertRepulo($model, $osztaly, $max_ferohely, $legitarsasag_id, $indulo_repter_id, $erkezo_repter_id, $indulasi_datum, $indulasi_ido, $erkezesi_datum, $erkezesi_ido)
+    public function adminPanelJaratok(){
+        $query = $this->db->select("SELECT repulo.*, legitarsasag.nev as legitarsasag, legitarsasag.img as logo, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.indulo_repuloter_id) as indulo_repter, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.erkezo_repuloter_id) as erkezo_repter FROM repulo INNER JOIN legitarsasag ON repulo.legitarsasag_id = legitarsasag.id");
+        $jaratok = array();
+        while ($row = $this->db->fetchArray($query)) {
+            array_push($jaratok, $row);
+        }
+        return $jaratok;
+    }
+
+    public function insertRepulo($model, $osztaly, $max_ferohely, $legitarsasag_id, $indulo_repter_id, $erkezo_repter_id, $indulasi_datum, $indulasi_ido, $erkezesi_datum, $erkezesi_ido, $jegy_ar)
     {
         //literal does not match format string: Date formátumok ezeket javítani kell az oracle nem támogatja a 0000-00-00 formátumot...
         $msg = "";
-        if (empty($model) || empty($osztaly) || empty($max_ferohely) || empty($indulasi_datum) || empty($indulasi_ido) || empty($erkezesi_datum) || empty($erkezesi_ido)) {
+        if (empty($model) || empty($osztaly) || empty($max_ferohely) || empty($indulasi_datum) || empty($indulasi_ido) || empty($erkezesi_datum) || empty($erkezesi_ido) || empty($jegy_ar)) {
             $msg = "Minden mező kitöltése kötelező";
         } else {
-            if (!is_numeric($max_ferohely)) {
-                $msg = "A férőhelyek száma mező csak számot tartalmazhat";
+            if (!is_numeric($max_ferohely) || !is_numeric($jegy_ar)) {
+                $msg = "A férőhelyek száma vagy a jegy ár  mező hibás";
             } else {
-                $insert = $this->db->insert("repulo", array("id" => ":id", "model" => ":model", "osztaly" => ":osztaly", "indulasi_ido" => ":indulasi_ido", "indulasi_datum" => ":indulasi_datum", "erkezesi_datum" => ":erkezesi_datum", "erkezesi_ido" => ":erkezesi_ido", "legitarsasag_id" => ":legitarsasag_id", "indulo_repter_id" => ":indulo_repter_id", "erkezo_repter_id" => ":erkezo_repter_id", "max_ferohely" => ":max_ferohely"), array(':id' => 2,":model" => $model, ":osztaly" => $osztaly, ":indulasi_ido" => $indulasi_ido, ":indulasi_datum" => $indulasi_datum, ":erkezesi_datum" => $erkezesi_datum, ":erkezesi_ido" => $erkezesi_ido, ":legitarsasag_id" => $legitarsasag_id, ":indulo_repter_id" => $indulo_repter_id, ":erkezo_repter_id" => $erkezo_repter_id, ":max_ferohely" => $max_ferohely));
+                $insert = $this->db->insert("repulo", array("model" => ":model", "osztaly" => ":osztaly", "indulasi_ido" => ":indulasi_ido", "indulasi_datum" => ":indulasi_datum", "erkezesi_datum" => ":erkezesi_datum", "erkezesi_ido" => ":erkezesi_ido", "legitarsasag_id" => ":legitarsasag_id", "indulo_repuloter_id" => ":indulo_repter_id", "erkezo_repuloter_id" => ":erkezo_repter_id", "max_ferohely" => ":max_ferohely", "jegy_ar" => ":jegy_ar"), array(":model" => $model, ":osztaly" => $osztaly, ":indulasi_ido" => $indulasi_ido, ":indulasi_datum" => date("y-M-d", strtotime($indulasi_datum)), ":erkezesi_datum" => date("y-M-d", strtotime($erkezesi_datum)), ":erkezesi_ido" => $erkezesi_ido, ":legitarsasag_id" => $legitarsasag_id, ":indulo_repter_id" => $indulo_repter_id, ":erkezo_repter_id" => $erkezo_repter_id, ":max_ferohely" => $max_ferohely, ":jegy_ar" => $jegy_ar));
                 if (!$insert) {
                     $msg = "Sikertelen hozzáadása";
                 }
@@ -131,16 +140,16 @@ class Legitarsasag
         return json_encode($response);
     }
 
-    public function editRepulo($model, $osztaly, $max_ferohely, $legitarsasag_id, $indulo_repter_id, $erkezo_repter_id, $indulasi_datum, $indulasi_ido, $erkezesi_datum, $erkezesi_ido, $repulo_id)
+    public function editRepulo($model, $osztaly, $max_ferohely, $legitarsasag_id, $indulo_repter_id, $erkezo_repter_id, $indulasi_datum, $indulasi_ido, $erkezesi_datum, $erkezesi_ido,$jegy_ar, $repulo_id)
     {
         $msg = "";
-        if (empty($model) || empty($osztaly) || empty($max_ferohely) || empty($indulasi_datum) || empty($indulasi_ido) || empty($erkezesi_datum) || empty($erkezesi_ido)) {
+        if (empty($model) || empty($osztaly) || empty($max_ferohely) || empty($indulasi_datum) || empty($indulasi_ido) || empty($erkezesi_datum) || empty($erkezesi_ido) || empty($jegy_ar)) {
             $msg = "Minden mező kitöltése kötelező";
         } else {
-            if (!is_numeric($max_ferohely)) {
-                $msg = "A férőhelyek száma mező csak számot tartalmazhat";
+            if (!is_numeric($max_ferohely) || !is_numeric($jegy_ar)) {
+                $msg = "A férőhelyek száma vagy a jegy ár mező hibás";
             } else {
-                $update = $this->db->update("repulo", array("model" => ":model", "osztaly" => ":osztaly", "indulasi_ido" => ":indulasi_ido", "indulasi_datum" => ":indulasi_datum", "erkezesi_datum" => ":erkezesi_datum", "erkezesi_ido" => ":erkezesi_ido", "legitarsasag_id" => ":legitarsasag_id", "indulo_repter_id" => ":indulo_repter_id", "erkezo_repter_id" => ":erkezo_repter_id", "max_ferohely" => ":max_ferohely"), "id = '" . $repulo_id . "'", array(":model" => $model, ":osztaly" => $osztaly, ":indulasi_ido" => $indulasi_ido, ":indulasi_datum" => $indulasi_datum, ":erkezesi_datum" => $erkezesi_datum, ":erkezesi_ido" => $erkezesi_ido, ":legitarsasag_id" => $legitarsasag_id, ":indulo_repter_id" => $indulo_repter_id, ":erkezo_repter_id" => $erkezo_repter_id, ":max_ferohely" => $max_ferohely));
+                $update = $this->db->update("repulo", array("model" => ":model", "osztaly" => ":osztaly", "indulasi_ido" => ":indulasi_ido", "indulasi_datum" => ":indulasi_datum", "erkezesi_datum" => ":erkezesi_datum", "erkezesi_ido" => ":erkezesi_ido", "legitarsasag_id" => ":legitarsasag_id", "indulo_repter_id" => ":indulo_repter_id", "erkezo_repter_id" => ":erkezo_repter_id", "max_ferohely" => ":max_ferohely", "jegy_ar" => ":jegy_ar"), "id = '" . $repulo_id . "'", array(":model" => $model, ":osztaly" => $osztaly, ":indulasi_ido" => $indulasi_ido, ":indulasi_datum" => date("y-M-d", strtotime($indulasi_datum)), ":erkezesi_datum" => date("y-M-d", strtotime($erkezesi_datum)), ":erkezesi_ido" => $erkezesi_ido, ":legitarsasag_id" => $legitarsasag_id, ":indulo_repter_id" => $indulo_repter_id, ":erkezo_repter_id" => $erkezo_repter_id, ":max_ferohely" => $max_ferohely, ":jegy_ar" => $jegy_ar));
                 if (!$update) {
                     $msg = "Sikertelen szerkesztés";
                 }
@@ -159,7 +168,7 @@ class Legitarsasag
 
     public function getRepuloById($id)
     {
-        $query = $this->db->select("SELECT repulo.*, legitarsasag.nev as legitarsasag, legitarsasag.img as logo, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.indulo_repter_id) as indulo_repter, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.erkezo_repter_id) as erkezo_repter FROM repulo INNER JOIN legitarsasag ON repulo.legitarsasag_id = legitarsasag.id WHERE repulo.id = :id ", array(":id" => $id));
+        $query = $this->db->select("SELECT repulo.*, legitarsasag.nev as legitarsasag, legitarsasag.img as logo, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.indulo_repuloter_id) as indulo_repter, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.erkezo_repuloter_id) as erkezo_repter FROM repulo INNER JOIN legitarsasag ON repulo.legitarsasag_id = legitarsasag.id WHERE repulo.id = :id ", array(":id" => $id));
         return $this->db->fetchObject($query);
     }
 

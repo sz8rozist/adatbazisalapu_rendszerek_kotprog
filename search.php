@@ -3,7 +3,7 @@ require_once("init.php");
 
 if (isset($_POST["jarat_search"])) {
     $j = new Legitarsasag();
-    $search = array("indulo_repter_id" => $_POST["indulasi_repuloter_id"], "erkezo_repter_id" => $_POST["erkezesi_repuloter_id"], "indulasi_datum" => $_POST["indulasi_datum"], "erkezesi_datum" => (isset($_POST["erkezesi_datum"])) ? $_POST["erkezesi_datum"] : NULL, "szemely_szam" => $_POST["szemely_szam"], "osztaly" => $_POST["osztaly"]);
+    $search = array("indulo_repuloter_id" => $_POST["indulasi_repuloter_id"], "erkezo_repuloter_id" => $_POST["erkezesi_repuloter_id"], "indulasi_datum" => $_POST["indulasi_datum"], "erkezesi_datum" => (isset($_POST["erkezesi_datum"])) ? $_POST["erkezesi_datum"] : NULL, "szemely_szam" => $_POST["szemely_szam"], "osztaly" => $_POST["osztaly"]);
     $jaratok = $j->getJaratok($search);
 } else {
     header("location: index.php");
@@ -15,8 +15,8 @@ searchBox();
 <div class="container section">
     <?php foreach ($jaratok as $jarat) :
         $r = new Repuloter();
-        $indulo_repter = $r->getJaratVarosByRepterId($jarat["INDULO_REPTER_ID"]);
-        $erkezo_repter = $r->getJaratVarosByRepterId($jarat["ERKEZO_REPTER_ID"]);
+        $indulo_repter = $r->getJaratVarosByRepterId($jarat["INDULO_REPULOTER_ID"]);
+        $erkezo_repter = $r->getJaratVarosByRepterId($jarat["ERKEZO_REPULOTER_ID"]);
     ?>
         <div class="card">
             <div class="columns">
@@ -52,6 +52,7 @@ searchBox();
                             <div class="booking_btn">
                                 <form action="booking.php" method="post">
                                     <input type="hidden" name="repulogep_id" , value="<?php echo $jarat['ID'] ?>">
+                                    <input type="hidden" name="max_ferohely" value="<?php echo $jarat['MAX_FEROHELY'] ?>">
                                     <input type="hidden" name="szemely_szam" value="<?php echo $_POST["szemely_szam"] ?>">
                                     <input type="hidden" name="ar" value="<?php echo $jarat["JEGY_AR"] ?>">
                                     <button type="submit" name="booking" class="button is-info" <?php echo (!isset($_SESSION['login'])) ? "disabled" : "" ?>>Foglalás</button>

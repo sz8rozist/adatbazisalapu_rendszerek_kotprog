@@ -90,3 +90,24 @@
 .tab-is-active{
     background-color: #3488ce !important;
 }
+
+.seat_row{
+    display: flex;
+    justify-content: space-evenly;
+}
+.seat_row .seat i{
+    font-size: 20px;
+}
+.seat_container{
+    margin-top: 10px;
+    padding-bottom: 10px;
+}
+.seat_row .seat{
+    cursor: pointer;
+}
+.seat_row .seat.foglalt{
+    color: red;
+}
+.seat_row .seat.kivalasztott{
+    color: green;
+}

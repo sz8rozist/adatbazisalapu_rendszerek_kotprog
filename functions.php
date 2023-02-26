@@ -89,6 +89,7 @@ function template_footer()
     <script src="js/auth.js"></script>
     <script src="js/tab.js"></script>
     <script src="js/idopont.js"></script>
+    <script src="js/booking.js"></script>
     </body>
     </html>
 ';

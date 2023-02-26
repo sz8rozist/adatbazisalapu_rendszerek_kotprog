@@ -10,7 +10,7 @@ navbar();
 searchBox();
 ?>
 <div class="container section">
-    <form action="ulohely.php" method="post">
+    <form action="booking_checkout.php" method="post">
         <div class="columns">
             <div class="column is-8">
                 <?php for ($i = 1; $i <= $_POST["szemely_szam"]; $i++) : ?>
@@ -37,38 +37,11 @@ searchBox();
                                 </div>
                             </div>
                         </div>
-                        <div class="section">
-                            <p>Kérem válasszon poggyászt</p>
-                            <?php
-                            $poggyasz = new Poggyasz();
-                            $poggyaszok = $poggyasz->getPoggyaszok();
-                            ?>
-                            <div class="columns">
-                                <?php foreach ($poggyaszok as $p) : ?>
-                                    <div class="column">
-                                        <?php echo $p["ELNEVEZES"] ?>
-                                    </div>
-                                    <div class="column">
-                                        <?php echo $p["SULY"] ?> kg
-                                    </div>
-                                    <div class="column">
-                                        <?php echo $p["MERET"] ?>
-                                    </div>
-                                    <div class="column">
-                                        <?php echo $p["AR"] ?> Ft
-                                    </div>
-                                    <div class="col">
-                                        <input type="number" name="poggyasz[]" min="0" class="input" value="0" id="">
-                                    </div>
-                                <?php endforeach; ?>
-
-                            </div>
-                        </div>
                     </nav>
                 <?php endfor; ?>
             </div>
             <div class="column is-4">
-                <nav class="panel">
+                <!--<nav class="panel">
                     <p class="panel-heading">
                         Összegzés
                     </p>
@@ -85,9 +58,33 @@ searchBox();
                         Összesen: <?php echo $_POST["szemely_szam"] * $_POST["ar"]; ?> Ft
                     </p>
                     <div class="panel-block">
-                        <button class="button is-info is-outlined is-fullwidth">
-                            Fizetés
+                        <input type="hidden" name="szemely_szam" value="<?php echo $_POST["szemely_szam"] ?>">
+                        <input type="hidden" name="repulogep_id" , value="<?php echo $_POST['repulogep_id'] ?>">
+                        <input type="hidden" name="ar" value="<?php echo $_POST["ar"] ?>">
+                        <input type="hidden" name="max_ferohely" value="<?php echo $_POST["max_ferohely"] ?>">
+                        <button type="submit" name="choose_ulohely" class="button is-info is-outlined is-fullwidth">
+                            Ülőhely kiválasztás
                         </button>
+                    </div>
+                </nav>-->
+
+                <nav class="panel">
+                    <p class="panel-heading">Ülőhely kiválasztás</p>
+                    <div class="seat_container">
+                        <div class="seat_row">
+                            <?php
+                            for ($i = 1; $i <= $_POST["max_ferohely"]; $i++) {
+                                if ($i % 6 == 0) {
+                                    echo "<div class='seat' id=".$_POST["szemely_szam"]." onclick='chooseSeat(this)'><i class='fa-solid fa-chair'></i></div></div><div class='seat_row'>";
+                                } else {
+                                    if($i % 3 == 0){
+                                        echo "<div class='seat_kozep'></div>";
+                                    }
+                                    echo "<div class='seat' id=".$_POST["szemely_szam"]." onclick='chooseSeat(this)'><i class='fa-solid fa-chair'></i></div>";
+                                }
+                            }
+                            ?>
+                        </div>
                     </div>
                 </nav>
             </div>
