@@ -50,7 +50,7 @@ searchBox();
                                 <?= $jarat["JEGY_AR"] * $_POST["szemely_szam"] ?> Ft
                             </div>
                             <div class="booking_btn">
-                                <form action="booking.php" method="post">
+                                <form action="booking.php?repulo=<?= $jarat['ID'] ?>&max_ferohely=<?=$jarat['MAX_FEROHELY']?>&szemely_szam=<?=$_POST['szemely_szam']?>&ar=<?=$jarat["JEGY_AR"]?>" method="post">
                                     <input type="hidden" name="repulogep_id" , value="<?php echo $jarat['ID'] ?>">
                                     <input type="hidden" name="max_ferohely" value="<?php echo $jarat['MAX_FEROHELY'] ?>">
                                     <input type="hidden" name="szemely_szam" value="<?php echo $_POST["szemely_szam"] ?>">
