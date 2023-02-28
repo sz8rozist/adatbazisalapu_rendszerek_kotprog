@@ -9,7 +9,7 @@ template_header("Járat keresés");
 navbar();
 ?>
 <div class="container section">
-    <form action="booking_checkout.php" method="post">
+    <form action="checkout.php" method="post">
         <div class="columns">
             <div class="column is-8">
                 <?php for ($i = 1; $i <= $_POST["szemely_szam"]; $i++) : ?>
@@ -38,6 +38,20 @@ navbar();
                         </div>
                     </nav>
                 <?php endfor; ?>
+                <nav class="panel">
+                        <p class="panel-heading">
+                            Fizetés mód
+                        </p>
+                        <div class="section">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" placeholder="Fizetési mód" type="text" name="fizetesi_mod">
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                    </nav>
             </div>
             <div class="column is-4">
                 <!--<nav class="panel">
@@ -69,29 +83,29 @@ navbar();
 
                 <nav class="panel">
                     <p class="panel-heading">Ülőhely kiválasztás</p>
-                    <div class="seat_container">
+                    <div class="seat_container" id="<?= $_POST["szemely_szam"] ?>">
                         <div class="seat_row">
                             <?php
                             for ($i = 1; $i <= $_POST["max_ferohely"]; $i++) {
                                 if ($i % 6 == 0) {
-                                    echo "<div class='seat' id=".$_POST["szemely_szam"]." onclick='chooseSeat(this)'><i class='fa-solid fa-chair'></i></div></div><div class='seat_row'>";
+                                    echo "<div class='seat' id=" . $i . "><i class='fa-solid fa-chair'></i></div></div><div class='seat_row'>";
                                 } else {
-                                    if($i % 3 == 0){
+                                    if ($i % 3 == 0) {
                                         echo "<div class='seat_kozep'></div>";
                                     }
-                                    echo "<div class='seat' id=".$_POST["szemely_szam"]." onclick='chooseSeat(this)'><i class='fa-solid fa-chair'></i></div>";
+                                    echo "<div class='seat' id=" . $i . "><i class='fa-solid fa-chair'></i></div>";
                                 }
                             }
                             ?>
                         </div>
                     </div>
                 </nav>
+                <input type="hidden" name="ulohelyek" id="ulohely_input" value="">
+                <button type="submit" name="booking" class="button is-info is-fullwidth">Foglalás</button>
             </div>
-
         </div>
     </form>
 </div>
-
 <?php
 template_footer();
 ?>
