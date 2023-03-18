@@ -5,6 +5,9 @@ $(document).ready(function () {
   var values = [];
 
   $(".seat_container .seat_row .seat").click(function () {
+    if($(this).hasClass("foglalt")){
+      return;
+    }
     if ($(this).hasClass("kivalasztott")) {
       counter--;
       $(this).removeClass("kivalasztott");
@@ -20,6 +23,5 @@ $(document).ready(function () {
       }
     }
     $("#ulohely_input").val(JSON.stringify(values));
-    console.log(counter);
   });
 });

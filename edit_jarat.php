@@ -13,13 +13,13 @@ $legitarsasagok = $legitarsasag->getLegitarsasagok();
 
 if (isset($_POST["new_jarat"])) {
     $response = json_decode($legitarsasag->insertRepulo($_POST["model"], $_POST["osztaly"], $_POST["max_ferohely"], $_POST["legitarsasag_id"], $_POST["indulo_repter_id"], $_POST["erkezo_repter_id"], $_POST['indulasi_datum'], $_POST["indulasi_ido"], $_POST["erkezesi_datum"], $_POST["erkezesi_ido"], $_POST["jegy_ar"]));
-    if (empty($response->msg)) header("location: jarat.php");
+    if (empty($response->msg)) header("location: jaratok.php");
 }
 if (isset($_GET["id"])) {
     $row = $legitarsasag->getRepuloById($_GET["id"]);
     if (isset($_POST["edit_jarat"])) {
         $response = json_decode($legitarsasag->editRepulo($_POST["model"], $_POST["osztaly"], $_POST["max_ferohely"], $_POST["legitarsasag_id"], $_POST["indulo_repter_id"], $_POST["erkezo_repter_id"], $_POST['indulasi_datum'], $_POST["indulasi_ido"], $_POST["erkezesi_datum"], $_POST["erkezesi_ido"],$_POST["jegy_ar"], $_GET["id"]));
-        if (empty($response->msg)) header("location: jarat.php");
+        if (empty($response->msg)) header("location: jaratok.php");
     }
 }
 ?>

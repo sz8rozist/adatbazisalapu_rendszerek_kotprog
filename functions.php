@@ -298,7 +298,7 @@ function dashboardNavbar()
                 <a href="repuloter.php" class="navbar-item">
                 Repülőterek
               </a>
-                <a href="#" class="navbar-item">
+                <a href="all_booking.php" class="navbar-item">
                   Foglalások
                 </a>
                 <div class="navbar-item has-dropdown is-hoverable">

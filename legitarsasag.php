@@ -45,7 +45,6 @@ if(isset($_GET["delete"])){
                                 <td>
                                     <a href="edit_legitarsasag.php?id=<?= $tarsasag["ID"] ?>"><i class="fa-solid fa-pen-to-square"></i></a>
                                     <a href="legitarsasag.php?delete=<?= $tarsasag["ID"] ?>"><i class="fa-solid fa-trash-arrow-up"></i></a>
-                                    <a href="addJarat.php?id=<?= $tarsasag["ID"] ?>"><i class="fa-solid fa-plus"></i></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

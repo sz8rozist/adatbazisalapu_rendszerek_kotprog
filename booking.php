@@ -1,19 +1,24 @@
 <?php
 require_once("init.php");
-
+$jegy = new Jegy();
 if(isset($_POST["checkout"])){
     $booking = array();
     foreach ($_POST["utas_veznev"] as $key => $veznev) {
         array_push($booking, array("utas_veznev" => $veznev, "utas_kernev" => $_POST["utas_kernev"][$key], "utas_szulido" => $_POST["utas_szulido"][$key], "ules" => json_decode($_POST["ulohelyek"])[$key]));
     }
-    var_dump($booking);
+    $booking["repulo_id"] = $_GET["repulo"];
+    $booking["felhasznalo_id"] = $_SESSION["id"];
+    $booking["fizetes_mod"] = $_POST["fizetes_mod"];
+    $booking["ar"] = $_GET["ar"];
+    $response = json_decode($jegy->insert($booking));
+    if(empty($response->msg)) header("location: index.php");
 }
 
 template_header("Járat keresés");
 navbar();
 ?>
 <div class="container section">
-    <form action="booking.php?repulo=<?= $_GET['repulo'] ?>&max_ferohely=<?=$_GET['max_ferohely']?>&szemely_szam=<?=$_GET['szemely_szam']?>&ar=<?=$_GET["ar"]?>" method="post">
+    <form action="booking.php?repulo=<?=$_GET['repulo'] ?>&max_ferohely=<?=$_GET['max_ferohely']?>&szemely_szam=<?=$_GET['szemely_szam']?>&ar=<?=$_GET["ar"]?>" method="post">
         <div class="columns">
             <div class="column is-8">
                 <?php for ($i = 1; $i <= $_GET["szemely_szam"]; $i++) : ?>
@@ -49,7 +54,7 @@ navbar();
                         <div class="section">
                             <div class="field">
                                 <div class="control">
-                                    <input class="input" placeholder="Fizetési mód" type="text" name="fizetesi_mod">
+                                    <input class="input" placeholder="Fizetési mód" type="text" name="fizetes_mod">
                                 </div>
 
                             </div>
@@ -63,14 +68,24 @@ navbar();
                     <div class="seat_container" id="<?= $_GET["szemely_szam"] ?>">
                         <div class="seat_row">
                             <?php
+                            $ulesek = $jegy->getLefoglaltUlohelyek($_GET["repulo"]);
                             for ($i = 1; $i <= $_GET["max_ferohely"]; $i++) {
                                 if ($i % 6 == 0) {
-                                    echo "<div class='seat' id=" . $i . "><i class='fa-solid fa-chair'></i></div></div><div class='seat_row'>";
+                                    if(in_array($i, $ulesek)){
+                                        echo "<div class='seat foglalt' id=" . $i . "><i class='fa-solid fa-chair'></i></div></div><div class='seat_row'>";
+                                    }else{
+                                        echo "<div class='seat' id=" . $i . "><i class='fa-solid fa-chair'></i></div></div><div class='seat_row'>";
+                                    }
                                 } else {
                                     if ($i % 3 == 0) {
                                         echo "<div class='seat_kozep'></div>";
                                     }
-                                    echo "<div class='seat' id=" . $i . "><i class='fa-solid fa-chair'></i></div>";
+                                    if(in_array($i, $ulesek)){
+                                        echo "<div class='seat foglalt' id=" . $i . "><i class='fa-solid fa-chair'></i></div>";
+                                    }else{
+                                        echo "<div class='seat' id=" . $i . "><i class='fa-solid fa-chair'></i></div>";
+                                    }
+                               
                                 }
                             }
                             ?>

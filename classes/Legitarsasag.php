@@ -126,7 +126,7 @@ class Legitarsasag
             $msg = "Minden mező kitöltése kötelező";
         } else {
             if (!is_numeric($max_ferohely) || !is_numeric($jegy_ar)) {
-                $msg = "A férőhelyek száma vagy a jegy ár  mező hibás";
+                $msg = "A férőhelyek száma vagy a jegy ár mező hibás";
             } else {
                 $insert = $this->db->insert("repulo", array("model" => ":model", "osztaly" => ":osztaly", "indulasi_ido" => ":indulasi_ido", "indulasi_datum" => ":indulasi_datum", "erkezesi_datum" => ":erkezesi_datum", "erkezesi_ido" => ":erkezesi_ido", "legitarsasag_id" => ":legitarsasag_id", "indulo_repuloter_id" => ":indulo_repter_id", "erkezo_repuloter_id" => ":erkezo_repter_id", "max_ferohely" => ":max_ferohely", "jegy_ar" => ":jegy_ar"), array(":model" => $model, ":osztaly" => $osztaly, ":indulasi_ido" => $indulasi_ido, ":indulasi_datum" => date("y-M-d", strtotime($indulasi_datum)), ":erkezesi_datum" => date("y-M-d", strtotime($erkezesi_datum)), ":erkezesi_ido" => $erkezesi_ido, ":legitarsasag_id" => $legitarsasag_id, ":indulo_repter_id" => $indulo_repter_id, ":erkezo_repter_id" => $erkezo_repter_id, ":max_ferohely" => $max_ferohely, ":jegy_ar" => $jegy_ar));
                 if (!$insert) {
@@ -173,7 +173,7 @@ class Legitarsasag
     }
 
     public function getJaratOsztaly(){
-        $query = $this->db->select("SELECT osztaly FROM repulo");
+        $query = $this->db->select("SELECT DISTINCT osztaly FROM repulo");
         $osztalyok = array();
         while ($row = $this->db->fetchArray($query)) {
             array_push($osztalyok, $row);
