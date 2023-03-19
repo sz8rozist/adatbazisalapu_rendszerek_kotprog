@@ -1,0 +1,91 @@
+create table Legitarsasag (
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    nev VARCHAR2(40),
+    img VARCHAR2(50),
+    PRIMARY KEY(id)
+);
+create table Repuloter (
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    nev VARCHAR2(50),
+    orszag VARCHAR2(50),
+    varos VARCHAR2(50),
+    PRIMARY KEY(id)
+    );
+create table Repulo (
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    max_ferohely INT,
+    model VARCHAR2(50),
+    osztaly VARCHAR2(50),
+    erkezo_repuloter_id INT,
+    indulasi_ido VARCHAR2(20),
+    indulasi_datum DATE,
+    erkezesi_ido VARCHAR2(20),
+    erkezesi_datum DATE,
+    legitarsasag_id INT,
+    indulo_repuloter_id INT,
+    jegy_ar INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(erkezo_repuloter_id) REFERENCES Repuloter(id) ON DELETE CASCADE,
+    FOREIGN KEY(indulo_repuloter_id) REFERENCES Repuloter(id) ON DELETE CASCADE,
+    FOREIGN KEY(legitarsasag_id) REFERENCES Legitarsasag(id) ON DELETE CASCADE
+    );
+    
+create table Poggyasz (
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    elnevezes VARCHAR2(40),
+    suly INT,
+    ar INT,
+    meret VARCHAR2(50),
+    PRIMARY KEY(id)
+);
+create table Felhasznalo(
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    felhasznalonev VARCHAR2(40),
+    jelszo VARCHAR(70),
+    jogosultsag SMALLINT DEFAULT 0,
+    PRIMARY KEY(id)
+);
+
+create table Feladott_poggyasz(
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    poggyasz_id INT,
+    jegy_id INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(poggyasz_id) REFERENCES Poggyasz(id) ON DELETE CASCADE,
+    FOREIGN KEY(jegy_id) REFERENCES Jegy(id) ON DELETE CASCADE
+);
+
+create table Ertekeles(
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    felhasznalo_id INT,
+    legitarsasag_id INT,
+    idopont DATE DEFAULT TO_DATE(indulasi_datum,'yyyy-mm-dd'),
+    szoveg VARCHAR2(70),
+    csillag INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
+    FOREIGN KEY(legitarsasag_id) REFERENCES Legitarsasag(id) ON DELETE CASCADE
+);
+create table Foglalas(
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    fizetve SMALLINT DEFAULT 0,
+    fizetes_mod VARCHAR2(40),
+    repulo_id INT,
+    felhasznalo_id INT,
+    FOREIGN KEY(repulo_id) REFERENCES Repulo(id) ON DELETE CASCADE,
+    FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
+    PRIMARY KEY(id)
+);
+create table Jegy(
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    utas_kernev VARCHAR2(40),
+    utas_veznev VARCHAR2(40),
+    utas_szulido DATE DEFAULT TO_DATE(indulasi_datum,'yyyy-mm-dd'),
+    ules INT,
+    becsekkolas SMALLINT DEFAULT 0,
+    ar INT,
+    foglalas_id INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(jegy_id) REFERENCES Foglalas(id) ON DELETE CASCADE
+);
+
