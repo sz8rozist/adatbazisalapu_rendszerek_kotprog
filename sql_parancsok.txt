@@ -1,0 +1,517 @@
+-- *** Custom date format setting ***
+ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD';
+
+-- *** Start of the create table block *** 
+create table Legitarsasag (
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    nev VARCHAR2(40),
+    img VARCHAR2(50) DEFAULT NULL,
+    PRIMARY KEY(id)
+);
+create table Repuloter (
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    nev VARCHAR2(100),
+    orszag VARCHAR2(50),
+    varos VARCHAR2(50),
+    PRIMARY KEY(id)
+    );
+create table Repulo (
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    max_ferohely INT,
+    model VARCHAR2(50),
+    osztaly VARCHAR2(50),
+    erkezo_repuloter_id INT,
+    indulasi_ido VARCHAR2(20),
+    indulasi_datum DATE,
+    erkezesi_ido VARCHAR2(20),
+    erkezesi_datum DATE,
+    legitarsasag_id INT,
+    indulo_repuloter_id INT,
+    jegy_ar INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(erkezo_repuloter_id) REFERENCES Repuloter(id) ON DELETE CASCADE,
+    FOREIGN KEY(indulo_repuloter_id) REFERENCES Repuloter(id) ON DELETE CASCADE,
+    FOREIGN KEY(legitarsasag_id) REFERENCES Legitarsasag(id) ON DELETE CASCADE
+    );  
+create table Poggyasz (
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    elnevezes VARCHAR2(40),
+    suly INT,
+    ar INT,
+    meret VARCHAR2(50),
+    PRIMARY KEY(id)
+);
+create table Felhasznalo(
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    felhasznalonev VARCHAR2(70),
+    jelszo VARCHAR(70),
+    jogosultsag NUMBER DEFAULT 0,
+    PRIMARY KEY(id)
+);
+create table Foglalas(
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    fizetve SMALLINT DEFAULT 0,
+    fizetes_mod VARCHAR2(40),
+    repulo_id INT,
+    felhasznalo_id INT,
+    FOREIGN KEY(repulo_id) REFERENCES Repulo(id) ON DELETE CASCADE,
+    FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
+    PRIMARY KEY(id)
+);
+create table Feladott_poggyasz(
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    poggyasz_id INT,
+    jegy_id INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(poggyasz_id) REFERENCES Poggyasz(id) ON DELETE CASCADE,
+    FOREIGN KEY(jegy_id) REFERENCES Jegy(id) ON DELETE CASCADE
+);
+create table Ertekeles(
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    felhasznalo_id INT,
+    legitarsasag_id INT,
+    idopont DATE,
+    szoveg VARCHAR2(100),
+    csillag INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
+    FOREIGN KEY(legitarsasag_id) REFERENCES Legitarsasag(id) ON DELETE CASCADE
+);
+create table Jegy(
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    utas_kernev VARCHAR2(70),
+    utas_veznev VARCHAR2(70),
+    utas_szulido DATE,
+    ules INT,
+    becsekkolas NUMBER DEFAULT 0,
+    ar INT,
+    foglalas_id INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(foglalas_id) REFERENCES Foglalas(id) ON DELETE CASCADE
+);
+
+-- *** End of the table creation block  ***
+
+-- *** Start of the insert data block ***
+
+-- Legitarsasag
+INSERT INTO Legitarsasag (nev) VALUES ('Wizz Air');
+INSERT INTO Legitarsasag (nev) VALUES ('Ryanair');
+INSERT INTO Legitarsasag (nev) VALUES ('Lufthansa');
+INSERT INTO Legitarsasag (nev) VALUES ('EasyJet');
+INSERT INTO Legitarsasag (nev) VALUES ('Air France');
+INSERT INTO Legitarsasag (nev) VALUES ('KLM Royal Dutch Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('British Airways');
+INSERT INTO Legitarsasag (nev) VALUES ('Turkish Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('Delta Air Lines');
+INSERT INTO Legitarsasag (nev) VALUES ('United Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('American Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('Southwest Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('Emirates');
+INSERT INTO Legitarsasag (nev) VALUES ('Qatar Airways');
+INSERT INTO Legitarsasag (nev) VALUES ('Cathay Pacific');
+INSERT INTO Legitarsasag (nev) VALUES ('Singapore Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('Etihad Airways');
+INSERT INTO Legitarsasag (nev) VALUES ('Air Canada');
+INSERT INTO Legitarsasag (nev) VALUES ('Alitalia');
+INSERT INTO Legitarsasag (nev) VALUES ('Aeroflot');
+INSERT INTO Legitarsasag (nev) VALUES ('China Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('Japan Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('Thai Airways');
+INSERT INTO Legitarsasag (nev) VALUES ('AirAsia');
+INSERT INTO Legitarsasag (nev) VALUES ('Virgin Atlantic');
+INSERT INTO Legitarsasag (nev) VALUES ('Qantas');
+INSERT INTO Legitarsasag (nev) VALUES ('Air New Zealand');
+INSERT INTO Legitarsasag (nev) VALUES ('South African Airways');
+INSERT INTO Legitarsasag (nev) VALUES ('EgyptAir');
+INSERT INTO Legitarsasag (nev) VALUES ('Air India');
+INSERT INTO Legitarsasag (nev) VALUES ('Gulf Air');
+INSERT INTO Legitarsasag (nev) VALUES ('Kenya Airways');
+INSERT INTO Legitarsasag (nev) VALUES ('SriLankan Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('Philippine Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('Air Mauritius');
+INSERT INTO Legitarsasag (nev) VALUES ('Royal Jordanian');
+INSERT INTO Legitarsasag (nev) VALUES ('Saudia');
+INSERT INTO Legitarsasag (nev) VALUES ('Iran Air');
+INSERT INTO Legitarsasag (nev) VALUES ('Air Algerie');
+INSERT INTO Legitarsasag (nev) VALUES ('Ethiopian Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('TAP Portugal');
+INSERT INTO Legitarsasag (nev) VALUES ('Garuda Indonesia');
+INSERT INTO Legitarsasag (nev) VALUES ('Austrian Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('Brussels Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('Finnair');
+INSERT INTO Legitarsasag (nev) VALUES ('Swiss International Air Lines');
+INSERT INTO Legitarsasag (nev) VALUES ('LOT Polish Airlines');
+INSERT INTO Legitarsasag (nev) VALUES ('Norwegian Air Shuttle');
+INSERT INTO Legitarsasag (nev) VALUES ('WOW air');
+
+-- Repuloter 
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Budapest Liszt Ferenc Nemzetközi Repülőtér', 'Magyarország', 'Budapest');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Narita Nemzetközi Repülőtér', 'Japán', 'Tokió');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Schwechat Nemzetközi Repülőtér', 'Ausztria', 'Bécs');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Malpensa Nemzetközi Repülőtér', 'Olaszország', 'Milánó');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Adolfo Suárez Madrid-Barajas Repülőtér', 'Spanyolország', 'Madrid');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Ninoy Aquino Nemzetközi Repülőtér', 'Fülöp-szigetek', 'Manila');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Vancouver Nemzetközi Repülőtér', 'Kanada', 'Vancouver');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Kuala Lumpur Nemzetközi Repülőtér', 'Malajzia', 'Kuala Lumpur');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Lester B. Pearson Nemzetközi Repülőtér', 'Kanada', 'Toronto');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Sanghaji Pudong Nemzetközi Repülőtér', 'Kína', 'Sanghaj');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Moszkva-Seremetyevo Nemzetközi Repülőtér', 'Oroszország', 'Moszkva');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('London Heathrow Nemzetközi Repülőtér', 'Egyesült Királyság', 'London');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Los Angeles Nemzetközi Repülőtér', 'Egyesült Államok', 'Los Angeles');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Párizs-Charles de Gaulle Nemzetközi Repülőtér', 'Franciaország', 'Párizs');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Istanbui Nemzetközi Repülőtér', 'Törökország', 'Isztambul');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Amsterdam-Schiphol Nemzetközi Repülőtér', 'Hollandia', 'Amsterdam');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Hong Kong Nemzetközi Repülőtér', 'Kína', 'Hong Kong');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Indira Gandhi Nemzetközi Repülőtér', 'India', 'Delhi');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Madrid-Barajas Nemzetközi Repülőtér', 'Spanyolország', 'Madrid');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Chhatrapati Shivaji Nemzetközi Repülőtér', 'India', 'Mumbai');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Vienna Nemzetközi Repülőtér', 'Ausztria', 'Bécs');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Incheon Nemzetközi Repülőtér', 'Dél-Korea', 'Soul');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Denver Nemzetközi Repülőtér', 'Egyesült Államok', 'Denver');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Suvarnabhumi Nemzetközi Repülőtér', 'Thaiföld', 'Bangkok');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Guangzhou Baiyun Nemzetközi Repülőtér', 'Kína', 'Guangzhou');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Leonardo da Vinci-Fiumicino Repülőtér', 'Olaszország', 'Róma');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Seattle-Tacoma Nemzetközi Repülőtér', 'Egyesült Államok', 'Seattle');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Miami Nemzetközi Repülőtér', 'Egyesült Államok', 'Miami');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Ben Gurion Nemzetközi Repülőtér', 'Izrael', 'Tel Aviv');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Sydney Kingsford Smith Nemzetközi Repülőtér', 'Ausztrália', 'Sydney');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Nizza Côte dAzur Nemzetközi Repülőtér', 'Franciaország', 'Nizza');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Római Ciampinoi Nemzetközi Repülőtér', 'Olaszország', 'Róma');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Münchner Nemzetközi Repülőtér', 'Németország', 'München');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Párizsi Orly Nemzetközi Repülőtér', 'Franciaország', 'Párizs');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Dubai Nemzetközi Repülőtér', 'Egyesült Arab Emírségek', 'Dubai');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Torontó Pearson Nemzetközi Repülőtér', 'Kanada', 'Torontó');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Dublini Nemzetközi Repülőtér', 'Írország', 'Dublin');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Chicagó-i OHare Nemzetközi Repülőtér', 'Egyesült Államok', 'Chicago');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Istanbuli Nemzetközi Repülőtér', 'Törökország', 'Isztambul');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Brüsszeli Nemzetközi Repülőtér', 'Belgium', 'Brüsszel');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Moszkvai Domogyedovói Nemzetközi Repülőtér', 'Oroszország', 'Moszkva');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Athéni Elefthériosz Venizélosz Nemzetközi Repülőtér', 'Görögország', 'Athén');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Frankfurti Nemzetközi Repülőtér', 'Németország', 'Frankfurt');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Pekingi Nemzetközi Repülőtér', 'Kína', 'Peking');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Köln-Bonn Nemzetközi Repülőtér', 'Németország', 'Köln');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Stockholm-Arlanda Nemzetközi Repülőtér', 'Svédország', 'Stockholm');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Barcelona Nemzetközi Repülőtér', 'Spanyolország', 'Barcelona');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Hamad Nemzetközi Repülőtér', 'Katar', 'Doha');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('San Francisco Nemzetközi Repülőtér', 'Egyesült Államok', 'San Francisco');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Philadelphia Nemzetközi Repülőtér', 'Egyesült Államok', 'Philadelphia');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Lisszaboni Portela Nemzetközi Repülőtér', 'Portugália', 'Lisszabon');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Párizsi Charles de Gaulle Repülőtér', 'Franciaország', 'Párizs');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Sydney Nemzetközi Repülőtér', 'Ausztrália', 'Sydney');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Sao Paulo-Guarulhos Nemzetközi Repülőtér', 'Brazília', 'São Paulo');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Berlin Schönefeld Repülőtér', 'Németország', 'Berlin');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Amsterdami Schiphol Repülőtér', 'Hollandia', 'Amszterdam');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Bécsi Nemzetközi Repülőtér', 'Ausztria', 'Bécs');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Római Fiumicino Nemzetközi Repülőtér', 'Olaszország', 'Róma');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Zürichi Nemzetközi Repülőtér', 'Svájc', 'Zürich');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Santiago de Chile-i Nemzetközi Repülőtér', 'Chile', 'Santiago de Chile');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Bangkoki Nemzetközi Repülőtér', 'Thaiföld', 'Bangkok');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Delhi Nemzetközi Repülőtér', 'India', 'Delhi');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('New York-i John F. Kennedy Nemzetközi Repülőtér', 'Egyesült Államok', 'New York');
+INSERT INTO Repuloter (nev, orszag, varos) VALUES ('Singapúri Changi Repülőtér', 'Szingapúr', 'Szingapúr');
+
+-- Poggyasz 
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Kis kézipoggyász', 7, 2000, '40x20x25cm');
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Nagy kézipoggyász', 10, 4000, '55x40x20cm');
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Közepes méretű poggyász', 23, 6000, '66x46x25cm');
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Nagy poggyász', 32, 10000, '81x54x30cm');
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Extra nagy poggyász', 45, 16000, '119x119x81cm');
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Sportfelszerelés', 20, 6000, '120x100x20cm');
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Kerékpár', 30, 10000, '140x30x80cm');
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Sífelszerelés', 20, 8000, '180x30x15cm');
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Zongorapoggyász', 70, 40000, '200x100x50cm');
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Házi kedvenc', 5, 8000, '40x25x25cm');
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Személyzet által feladott csomag', 23, 8000, '56x45x25cm');
+INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Díszpoggyász', 20, 10000, '55x35x20cm');
+
+--Felhasznalo 
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('David','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Alex','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Maria','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Anna','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Marco','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Antonio','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Daniel','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Andrea','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Laura','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Ali','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Jose','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sandra','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sara','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Carlos','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Ana','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Michael','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Marie','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Francesco','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mehmet','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Marta','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sarah','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('John','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Luca','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Martin','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Murat','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mario','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Juan','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Thomas','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Giuseppe','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Chris','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Peter','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mustafa','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Jessica','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mohamed','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Monika','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Elena','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Robert','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Manuel','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Christian','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Roberto','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Kevin','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Pedro','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Patrick','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Ahmet','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Luis','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Cristina','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Jan','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Paul','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Patricia','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Eva','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Ahmed','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mary','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Eric','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Alessandro','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Miguel','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sergio','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Tony','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Alexandra','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Ivan','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Vanessa','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Julie','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Alberto','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Nicolas','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sonia','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Silvia','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Claudia','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Julien','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Max','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Adam','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mike','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Hakan','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sabrina','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Marina','08c324f90200a641d9c4ecd40c6a4b09');
+INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Marc','08c324f90200a641d9c4ecd40c6a4b09');
+
+-- Repulo 
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (160, 'Airbus A320neo', 'Economy', 2, '14:00', TO_DATE('2023-03-12', 'YYYY-MM-DD'), '16:00', TO_DATE('2023-03-12', 'YYYY-MM-DD'), 2, 3, 18000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (220, 'Boeing 747-8', 'Business', 1, '12:00', TO_DATE('2023-03-13', 'YYYY-MM-DD'), '15:30', TO_DATE('2023-03-13', 'YYYY-MM-DD'), 1, 4, 40000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (180, 'Airbus A330-300', 'Economy', 4, '11:00', TO_DATE('2023-03-11', 'YYYY-MM-DD'), '15:00', TO_DATE('2023-03-11', 'YYYY-MM-DD'), 4, 5, 22000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (220, 'Boeing 787-9 Dreamliner', 'Business', 3, '16:00', TO_DATE('2023-03-16', 'YYYY-MM-DD'), '18:00', TO_DATE('2023-03-16', 'YYYY-MM-DD'), 3, 1, 38000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (150, 'Embraer E195-E2', 'Economy', 5, '08:30', TO_DATE('2023-03-17', 'YYYY-MM-DD'), '11:00', TO_DATE('2023-03-17', 'YYYY-MM-DD'), 5, 2, 16000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (200, 'Boeing 737-900ER', 'Business', 1, '09:30', TO_DATE('2023-03-18', 'YYYY-MM-DD'), '12:00', TO_DATE('2023-03-18', 'YYYY-MM-DD'), 1, 3, 34000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (120, 'Boeing 777-200LR', 'Economy', 3, '08:00', TO_DATE('2023-03-19', 'YYYY-MM-DD'), '12:30', TO_DATE('2023-03-19', 'YYYY-MM-DD'), 3, 4, 25000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (170, 'Airbus A350-900', 'Business', 4, '13:00', TO_DATE('2023-03-20', 'YYYY-MM-DD'), '16:30', TO_DATE('2023-03-20', 'YYYY-MM-DD'), 4, 5, 42000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (140, 'Boeing 737 MAX 8', 'Economy', 5, '10:00', TO_DATE('2023-03-21', 'YYYY-MM-DD'), '12:00', TO_DATE('2023-03-21', 'YYYY-MM-DD'), 5, 1, 20000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (200, 'Boeing 737-800', 'Economy', 1, '09:30', TO_DATE('2023-03-10', 'YYYY-MM-DD'), '12:00', TO_DATE('2023-03-10', 'YYYY-MM-DD'), 1, 2, 20000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (120, 'Boeing 777-300ER', 'Business', 3, '08:00', TO_DATE('2023-03-15', 'YYYY-MM-DD'), '12:30', TO_DATE('2023-03-15', 'YYYY-MM-DD'), 3, 2, 35000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (150, 'Airbus A320', 'Economy', 2, '14:00', TO_DATE('2023-03-18', 'YYYY-MM-DD'), '18:00', TO_DATE('2023-03-18', 'YYYY-MM-DD'), 2, 3, 15000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (100, 'Airbus A330', 'Business', 4, '10:30', TO_DATE('2023-03-22', 'YYYY-MM-DD'), '15:00', TO_DATE('2023-03-22', 'YYYY-MM-DD'), 4, 1, 40000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (180, 'Boeing 747-400', 'Economy', 1, '11:00', TO_DATE('2023-03-25', 'YYYY-MM-DD'), '15:00', TO_DATE('2023-03-25', 'YYYY-MM-DD'), 1, 4, 18000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (150, 'Airbus A380', 'Business', 3, '09:00', TO_DATE('2023-03-28', 'YYYY-MM-DD'), '13:00', TO_DATE('2023-03-28', 'YYYY-MM-DD'), 3, 2, 40000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (200, 'Boeing 787-8', 'Economy', 4, '12:30', TO_DATE('2023-04-02', 'YYYY-MM-DD'), '16:00', TO_DATE('2023-04-02', 'YYYY-MM-DD'), 4, 1, 22000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (120, 'Boeing 737-700', 'Business', 2, '08:00', TO_DATE('2023-04-05', 'YYYY-MM-DD'), '11:30', TO_DATE('2023-04-05', 'YYYY-MM-DD'), 2, 3, 32000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (170, 'Airbus A330-300', 'Economy', 1, '15:00', TO_DATE('2023-04-09', 'YYYY-MM-DD'), '19:00', TO_DATE('2023-04-09', 'YYYY-MM-DD'), 1, 4, 16000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (140, 'Boeing 777-200LR', 'Business', 3, '11:30', TO_DATE('2023-04-12', 'YYYY-MM-DD'), '16:00', TO_DATE('2023-04-12', 'YYYY-MM-DD'), 3, 2, 39000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (250, 'Airbus A320', 'Economy', 2, '10:00', TO_DATE('2023-03-12', 'YYYY-MM-DD'), '14:00', TO_DATE('2023-03-12', 'YYYY-MM-DD'), 2, 4, 18000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (180, 'Boeing 767-300', 'Business', 3, '12:00', TO_DATE('2023-03-12', 'YYYY-MM-DD'), '15:30', TO_DATE('2023-03-12', 'YYYY-MM-DD'), 1, 5, 40000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (220, 'Airbus A350-1000', 'Economy', 1, '09:30', TO_DATE('2023-03-13', 'YYYY-MM-DD'), '14:00', TO_DATE('2023-03-13', 'YYYY-MM-DD'), 3, 2, 25000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (170, 'Boeing 737 MAX 9', 'Business', 4, '13:00', TO_DATE('2023-03-13', 'YYYY-MM-DD'), '15:30', TO_DATE('2023-03-13', 'YYYY-MM-DD'), 2, 1, 42000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (200, 'Boeing 777X', 'Economy', 3, '11:00', TO_DATE('2023-03-14', 'YYYY-MM-DD'), '16:00', TO_DATE('2023-03-14', 'YYYY-MM-DD'), 1, 5, 22000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (150, 'Airbus A330-200', 'Business', 5, '15:00', TO_DATE('2023-03-14', 'YYYY-MM-DD'), '18:30', TO_DATE('2023-03-14', 'YYYY-MM-DD'), 2, 4, 38000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (220, 'Boeing 787-8', 'Economy', 4, '12:30', TO_DATE('2023-03-15', 'YYYY-MM-DD'), '17:30', TO_DATE('2023-03-15', 'YYYY-MM-DD'), 3, 1, 19000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (180, 'Airbus A380-800', 'Business', 1, '09:00', TO_DATE('2023-03-16', 'YYYY-MM-DD'), '13:30', TO_DATE('2023-03-16', 'YYYY-MM-DD'), 1, 5, 45000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (150, 'Boeing 747-400', 'Economy', 2, '14:00', TO_DATE('2023-03-16', 'YYYY-MM-DD'), '19:00', TO_DATE('2023-03-16', 'YYYY-MM-DD'), 2, 3, 17000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (200, 'Airbus A321neo', 'Business', 4, '11:30', TO_DATE('2023-03-17', 'YYYY-MM-DD'), '14:30', TO_DATE('2023-03-17', 'YYYY-MM-DD'), 3, 2, 34000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (240, 'Airbus A321', 'Economy', 2, '11:45', TO_DATE('2023-03-25', 'YYYY-MM-DD'), '15:30', TO_DATE('2023-03-25', 'YYYY-MM-DD'), 2, 1, 18000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (160, 'Airbus A330-200', 'Business', 1, '13:20', TO_DATE('2023-03-15', 'YYYY-MM-DD'), '17:45', TO_DATE('2023-03-15', 'YYYY-MM-DD'), 4, 4, 40000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (180, 'Boeing 787-9 Dreamliner', 'Economy', 5, '08:50', TO_DATE('2023-03-20', 'YYYY-MM-DD'), '13:30', TO_DATE('2023-03-20', 'YYYY-MM-DD'), 5, 1, 22000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (120, 'Boeing 737 MAX 8', 'Business', 4, '15:15', TO_DATE('2023-03-12', 'YYYY-MM-DD'), '18:45', TO_DATE('2023-03-12', 'YYYY-MM-DD'), 3, 3, 38000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (240, 'Airbus A321neo', 'Economy', 3, '10:15', TO_DATE('2023-03-23', 'YYYY-MM-DD'), '14:05', TO_DATE('2023-03-23', 'YYYY-MM-DD'), 2, 2, 17000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (180, 'Boeing 777X', 'Business', 1, '09:40', TO_DATE('2023-03-14', 'YYYY-MM-DD'), '13:10', TO_DATE('2023-03-14', 'YYYY-MM-DD'), 5, 3, 42000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (160, 'Boeing 787-10 Dreamliner', 'Economy', 4, '16:35', TO_DATE('2023-03-18', 'YYYY-MM-DD'), '20:30', TO_DATE('2023-03-18', 'YYYY-MM-DD'), 1, 1, 20000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (120, 'Boeing 737-900ER', 'Business', 2, '07:40', TO_DATE('2023-03-13', 'YYYY-MM-DD'), '10:45', TO_DATE('2023-03-13', 'YYYY-MM-DD'), 3, 5, 36000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (240, 'Airbus A320neo', 'Economy', 3, '14:55', TO_DATE('2023-03-28', 'YYYY-MM-DD'), '19:25', TO_DATE('2023-03-28', 'YYYY-MM-DD'), 4, 1, 15000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (180, 'Boeing 777-300ER', 'Business', 5, '08:10', TO_DATE('2023-03-21', 'YYYY-MM-DD'), '11:40', TO_DATE('2023-03-21', 'YYYY-MM-DD'), 2, 4, 39000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (130, 'Airbus A320', 'Economy', 4, '15:45', TO_DATE('2023-03-10', 'YYYY-MM-DD'), '18:00', TO_DATE('2023-03-10', 'YYYY-MM-DD'), 2, 3, 18000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (180, 'Boeing 767-300ER', 'Business', 2, '11:00', TO_DATE('2023-03-11', 'YYYY-MM-DD'), '14:30', TO_DATE('2023-03-11', 'YYYY-MM-DD'), 1, 4, 32000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (220, 'Boeing 777-200LR', 'Economy', 1, '08:15', TO_DATE('2023-03-12', 'YYYY-MM-DD'), '12:45', TO_DATE('2023-03-12', 'YYYY-MM-DD'), 3, 2, 21000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (120, 'Boeing 737-900ER', 'Business', 3, '10:30', TO_DATE('2023-03-13', 'YYYY-MM-DD'), '13:30', TO_DATE('2023-03-13', 'YYYY-MM-DD'), 4, 1, 35000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (160, 'Airbus A330-300', 'Economy', 2, '07:45', TO_DATE('2023-03-14', 'YYYY-MM-DD'), '10:30', TO_DATE('2023-03-14', 'YYYY-MM-DD'), 2, 4, 19000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (200, 'Boeing 787-9 Dreamliner', 'Business', 1, '11:00', TO_DATE('2023-03-15', 'YYYY-MM-DD'), '15:45', TO_DATE('2023-03-15', 'YYYY-MM-DD'), 4, 3, 40000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (180, 'Boeing 737-800', 'Economy', 3, '08:30', TO_DATE('2023-03-16', 'YYYY-MM-DD'), '10:45', TO_DATE('2023-03-16', 'YYYY-MM-DD'), 3, 1, 16000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (130, 'Airbus A350-900', 'Business', 2, '14:15', TO_DATE('2023-03-17', 'YYYY-MM-DD'), '18:30', TO_DATE('2023-03-17', 'YYYY-MM-DD'), 1, 4, 38000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (220, 'Boeing 777-300ER', 'Economy', 1, '10:00', TO_DATE('2023-03-18', 'YYYY-MM-DD'), '12:30', TO_DATE('2023-03-18', 'YYYY-MM-DD'), 2, 2, 22000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (120, 'Boeing 737-700', 'Business', 4, '09:00', TO_DATE('2023-03-19', 'YYYY-MM-DD'), '12:30', TO_DATE('2023-03-19', 'YYYY-MM-DD'), 4, 1, 29000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (180, 'Airbus A320neo', 'Economy', 4, '13:00', TO_DATE('2023-03-25', 'YYYY-MM-DD'), '17:00', TO_DATE('2023-03-25', 'YYYY-MM-DD'), 2, 3, 25000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (300, 'Boeing 747-8', 'First', 1, '10:00', TO_DATE('2023-04-01', 'YYYY-MM-DD'), '14:00', TO_DATE('2023-04-01', 'YYYY-MM-DD'), 1, 2, 50000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (150, 'Boeing 787-9', 'Business', 2, '14:30', TO_DATE('2023-04-05', 'YYYY-MM-DD'), '17:00', TO_DATE('2023-04-05', 'YYYY-MM-DD'), 3, 1, 35000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (200, 'Airbus A330-300', 'Economy', 3, '16:30', TO_DATE('2023-04-07', 'YYYY-MM-DD'), '21:00', TO_DATE('2023-04-07', 'YYYY-MM-DD'), 2, 1, 28000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (220, 'Boeing 777-200LR', 'First', 4, '11:00', TO_DATE('2023-04-10', 'YYYY-MM-DD'), '15:00', TO_DATE('2023-04-10', 'YYYY-MM-DD'), 4, 2, 55000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (100, 'Airbus A319', 'Business', 1, '12:00', TO_DATE('2023-04-12', 'YYYY-MM-DD'), '14:00', TO_DATE('2023-04-12', 'YYYY-MM-DD'), 3, 3, 30000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (130, 'Boeing 737 MAX 8', 'Economy', 2, '15:00', TO_DATE('2023-04-15', 'YYYY-MM-DD'), '18:00', TO_DATE('2023-04-15', 'YYYY-MM-DD'), 1, 4, 20000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (140, 'Airbus A320', 'First', 3, '09:00', TO_DATE('2023-04-18', 'YYYY-MM-DD'), '11:30', TO_DATE('2023-04-18', 'YYYY-MM-DD'), 2, 2, 50000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (250, 'Boeing 767-300ER', 'Business', 4, '17:00', TO_DATE('2023-04-20', 'YYYY-MM-DD'), '22:00', TO_DATE('2023-04-20', 'YYYY-MM-DD'), 4, 3, 40000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (150, 'Airbus A320', 'Economy', 2, '10:30', TO_DATE('2023-03-12', 'YYYY-MM-DD'), '13:00', TO_DATE('2023-03-12', 'YYYY-MM-DD'), 2, 1, 18000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (300, 'Boeing 747-8', 'First', 4, '16:00', TO_DATE('2023-03-13', 'YYYY-MM-DD'), '19:30', TO_DATE('2023-03-13', 'YYYY-MM-DD'), 4, 3, 80000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (220, 'Boeing 787-10', 'Business', 5, '12:00', TO_DATE('2023-03-14', 'YYYY-MM-DD'), '15:30', TO_DATE('2023-03-14', 'YYYY-MM-DD'), 5, 1, 40000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (150, 'Airbus A321neo', 'Economy', 3, '14:30', TO_DATE('2023-03-15', 'YYYY-MM-DD'), '17:30', TO_DATE('2023-03-15', 'YYYY-MM-DD'), 3, 2, 22000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (180, 'Boeing 737 MAX 8', 'Business', 1, '11:00', TO_DATE('2023-03-16', 'YYYY-MM-DD'), '14:30', TO_DATE('2023-03-16', 'YYYY-MM-DD'), 2, 4, 35000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (280, 'Boeing 777X', 'First', 2, '17:00', TO_DATE('2023-03-17', 'YYYY-MM-DD'), '21:00', TO_DATE('2023-03-17', 'YYYY-MM-DD'), 1, 3, 75000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (200, 'Airbus A330-800neo', 'Business', 5, '13:30', TO_DATE('2023-03-18', 'YYYY-MM-DD'), '17:00', TO_DATE('2023-03-18', 'YYYY-MM-DD'), 4, 1, 45000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (120, 'Embraer E190-E2', 'Economy', 4, '09:00', TO_DATE('2023-03-19', 'YYYY-MM-DD'), '11:30', TO_DATE('2023-03-19', 'YYYY-MM-DD'), 3, 5, 15000);
+INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (220, 'Boeing 787-8', 'Business', 1, '12:00', TO_DATE('2023-03-20', 'YYYY-MM-DD'), '15:30', TO_DATE('2023-03-20', 'YYYY-MM-DD'), 5, 4, 40000);
+
+-- *** Data generator for Jegy, Feladott_poggyasz and Jegy tables ****
+DECLARE
+  TYPE utas_keresztnev IS TABLE OF VARCHAR2(50);
+  TYPE utas_vezeteknev IS TABLE OF VARCHAR2(50);
+  TYPE ertekeles_szoveg IS TABLE OF VARCHAR2(100);
+  TYPE ertekeles_csillag IS TABLE OF NUMBER;
+  TYPE fizetesi_mod IS TABLE OF VARCHAR(40);
+  v_utas_keresztnev VARCHAR2(100);
+  v_utas_vezeteknev VARCHAR2(100);
+  v_fizetesi_mod VARCHAR2(40);
+  v_utas_szuletesi_datum DATE;
+  v_foglalas_id NUMBER;
+  v_max_ferohely NUMBER;
+  v_ules NUMBER;
+  v_ar NUMBER;
+  v_random_id NUMBER;
+  v_ertekeles_datum DATE;
+
+  
+  utas_keresztnev_list utas_keresztnev := utas_keresztnev('Anna', 'Bence', 'Csongor', 'Dávid', 'Emese', 'Fanni', 'Gergő', 'Hanna', 'István', 'Judit');
+  utas_vezeteknev_list utas_vezeteknev := utas_vezeteknev('Nagy', 'Kovács', 'Horváth', 'Szabó', 'Tóth', 'Kiss', 'Varga', 'Farkas', 'Balogh', 'Molnár');
+  ertekeles_szoveg_list ertekeles_szoveg := ertekeles_szoveg(
+                                'Nincs elég információ a járatokról, Rosszul szervezett transzfer, Kevés üzlet és étterem', 'Kényelmes és tiszta váróterek, de túlzsúfolt terminálok', 'A legjobb reptér, amit valaha látottam',
+								'Nagyon rossz parkolási lehetőségek', 'Sokáig kell várni a csomagokra', 'Kevés üzlet és szolgáltatás', 'Szép és tiszta váróterek, de túlzsúfolt terminálok', 'Fantasztikus reptér, kiváló szolgáltatásokkal',
+								'Nem elég informatív a tájékoztató rendszer', 'Kevés üzlet és étterem', 'Rosszul szervezett terminálok', 'Segítőkész személyzet, de túlzsúfolt reptér', 'Fantasztikus reptér, kiváló szolgáltatásokkal',
+								'Nagyon drága parkolási díjak', 'Sokkal több wc-re lenne szükség', 'Kevés információ a járatokról', 'Kényelmes és tiszta váróterek, de túlzsúfolt terminálok', 'Fantasztikus repülési élmény és szolgáltatások',
+								'Nagyon lassú az átvizsgálás a biztonsági ellenőrzésnél', 'Szűk és zavaró váróterek', 'Kevés üzlet és szolgáltatás', 'Jó szolgáltatás, de drága árak', 'Fantasztikus repülési élmény és kényelmes terminálok',
+								'Rendetlen és koszos', 'Rossz kiszolgálás', 'Átlagos szolgáltatás', 'Kellemes környezet', 'Kiváló utazási élmény',
+								'Szörnyű parkolási lehetőségek', 'Sokáig kellett sorban állni a becsekkoláshoz', 'Magas árak az étkezésre', 'Jó kiszolgálás, de elavult terminálok', 'Fantasztikus légkör és kényelmes székek',
+								'Lassú biztonsági ellenőrzés és túlzsúfolt terminálok', 'Könnyen eltévedtem a nagy területen', 'Kevés ülőhely és kávézó', 'Tiszta, de unalmas és szűk váróterek', 'Kiváló szolgáltatás és bőséges ételválaszték',
+								'Nincs ingyenes wifi', 'Magas árak az ajándékboltban', 'Csak kevés információs tábla van az épületen', 'Modern épület és gyors fel- és leszállás', 'Kiváló utazási élmény, minden igényt kielégítő szolgáltatások',
+								'Rendkívül zsúfolt és zajos', 'Rövid transzferidő és kényelmes környezet', 'Jó szolgáltatás, de kevés ételválaszték', 'Könnyű navigáció és segítőkész személyzet', 'Kiváló reptér, magas színvonalú szolgáltatásokkal',
+								'Sokkal több wc-re lenne szükség', 'Nagyon magas parkolási díjak', 'Nincs elegendő fedélzeti információ', 'Gyors és hatékony szolgáltatások, de túlzsúfolt terminálok', 'A legjobb reptér, amit valaha látottam',
+								'Nagyon hosszú sorok a biztonsági ellenőrzéshez', 'Szűk és zavaró váróterek', 'Kevés üzlet és étterem', 'Jó szolgáltatás, de drága árak', 'Fantasztikus repülési élmény',
+								'A parkoló messze van az épülettől', 'Rossz légkondicionálás a váróterekben', 'Kevés információ a járatokról', 'Kényelmes és tiszta váróterek, de túlzsúfolt terminálok', 'Kiváló repülési élmény és szolgáltatások',
+								'Nagyon drága étkezési lehetőségek', 'Lassú és zsúfolt terminálok', 'Sokáig kellett várni a csomagokra', 'Szép és modern épület, de nehéz tájékozódni', 'A legjobb repülési élmény, amit valaha tapasztaltam',
+								'Rossz wifi kapcsolat', 'Rövid transzferidő és kényelmes terminálok', 'Kevés üzlet és szolgáltatás', 'Segítőkész személyzet, de túlzsúfolt reptér', 'Fantasztikus reptér, kiváló szolgáltatásokkal'
+                                );
+  ertekeles_csillag_list ertekeles_csillag := ertekeles_csillag(2, 2, 3, 4, 5, 2, 3, 3, 4, 5, 2, 3, 4, 5,
+								2, 2, 3, 4, 5, 2, 3, 3, 4, 5, 1, 2, 3, 4, 5,
+								2, 3, 3, 4, 5, 2, 3, 3, 4, 5, 3, 3, 3, 4, 5,
+								2, 4, 4, 4, 5, 2, 2, 3, 4, 5, 2, 3, 3, 4, 5,
+								3, 3, 3, 4, 5, 2, 3, 3, 4, 5, 3, 4, 3, 4, 5);
+
+  fizetesi_mod_list fizetesi_mod := fizetesi_mod('Bankártya', 'Utalás', 'Készpénz', 'PayPal', 'Ajándékutalvány', 'Átutalás');
+  
+  FUNCTION random_index(p_limit IN PLS_INTEGER) RETURN PLS_INTEGER
+  IS
+  BEGIN
+    RETURN FLOOR(DBMS_RANDOM.VALUE(1, p_limit));
+  END random_index;
+  
+FUNCTION random_date(p_start_date IN DATE, p_end_date IN DATE) RETURN DATE
+  IS
+  BEGIN
+    RETURN p_start_date + TRUNC(DBMS_RANDOM.VALUE(0, 1) * (p_end_date - p_start_date));
+  END random_date;
+  
+FUNCTION random_ules(limit INTEGER) RETURN INTEGER
+    IS
+    BEGIN
+        RETURN FLOOR(DBMS_RANDOM.VALUE(1,limit));
+    END random_ules;
+    
+    
+BEGIN
+  FOR i IN 1..500 LOOP
+  v_random_id := random_index(ertekeles_szoveg_list.COUNT);
+  v_ertekeles_datum := random_date(TO_DATE('2010-01-01', 'YYYY-MM-DD'), SYSDATE);
+  INSERT INTO Ertekeles(felhasznalo_id, legitarsasag_id, idopont, szoveg, csillag)
+    VALUES((SELECT id
+	   FROM (SELECT id 
+		 FROM Felhasznalo
+		 ORDER BY DBMS_RANDOM.VALUE)
+	   WHERE ROWNUM = 1),
+	   (SELECT id
+	    FROM (SELECT id
+	    	  FROM Legitarsasag
+		  ORDER BY DBMS_RANDOM.VALUE)
+	    WHERE ROWNUM = 1),
+	v_ertekeles_datum,
+	ertekeles_szoveg_list(v_random_id),
+	ertekeles_csillag_list(v_random_id));
+		
+	    
+  END LOOP;
+
+  FOR i IN 1..100 LOOP
+  v_fizetesi_mod := fizetesi_mod_list(random_index(fizetesi_mod_list.COUNT));
+  INSERT INTO Jegy (fizetve, fizetes_mod, repulo_id, felhasznalo_id)
+    VALUES(DBMS_RANDOM.VALUE(0,1) ,v_fizetesi_mod, (SELECT id
+                                                    FROM (SELECT Repulo.id
+                                                         FROM Repulo
+                                                         ORDER BY DBMS_RANDOM.VALUE)
+                                                    WHERE ROWNUM = 1),
+                                                   (SELECT id 
+                                                   FROM (SELECT Felhasznalo.id
+                                                         FROM Felhasznalo
+                                                         ORDER BY DBMS_RANDOM.VALUE)
+                                                   WHERE ROWNUM = 1));
+  END LOOP;
+  FOR i in 1..100 LOOP
+
+  INSERT INTO Feladott_poggyasz(poggyasz_id,jegy_id)
+    VALUES((SELECT id  
+			FROM (SELECT Poggyasz.id 
+					FROM Poggyasz
+					ORDER BY DBMS_RANDOM.VALUE)
+					WHERE ROWNUM = 1),
+			(SELECT id  
+			FROM (SELECT Jegy.id
+					FROM Jegy 
+					ORDER BY DBMS_RANDOM.VALUE)
+			WHERE ROWNUM = 1));
+  END LOOP;
+  
+  FOR i IN 1..100 LOOP
+    v_utas_vezeteknev := utas_vezeteknev_list(random_index(utas_vezeteknev_list.COUNT));
+    v_utas_keresztnev := utas_keresztnev_list(random_index(utas_keresztnev_list.COUNT));
+    v_utas_szuletesi_datum := random_date(TO_DATE('1950-01-01', 'YYYY-MM-DD'), SYSDATE);
+    SELECT id INTO v_foglalas_id
+        FROM Foglalas 
+        ORDER BY DBMS_RANDOM.VALUE FETCH FIRST 1 ROW ONLY;
+    SELECT max_ferohely INTO v_max_ferohely 
+        FROM Repulo 
+        WHERE id =(SELECT repulo_id 
+                    FROM Foglalas 
+                    WHERE id = v_foglalas_id);
+
+    SELECT (COALESCE(SUM(Poggyasz.ar), 0) + COALESCE(SUM(Repulo.jegy_ar),0)) INTO v_ar 
+    FROM Jegy
+    INNER JOIN Feladott_poggyasz ON Jegy.id = Feladott_poggyasz.jegy_id 
+    INNER JOIN Poggyasz ON Feladott_poggyasz.id = Poggyasz.id 
+    INNER JOIN Foglalas ON Jegy.foglalas_id = Foglalas.id
+    INNER JOIN Repulo ON Foglalas.repulo_id = Repulo.id
+    WHERE Foglalas.id = v_foglalas_id;
+
+
+    v_ules := random_ules(v_max_ferohely);
+    
+    INSERT INTO Jegy (utas_kernev, utas_veznev, utas_szulido, ules, becsekkolas, ar, foglalas_id) 
+    VALUES (v_utas_keresztnev, v_utas_vezeteknev, v_utas_szuletesi_datum, v_ules, DBMS_RANDOM.VALUE(0,1), v_ar, v_foglalas_id);
+  END LOOP;
+  COMMIT;
+END;
