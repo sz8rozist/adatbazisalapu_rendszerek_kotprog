@@ -58,6 +58,18 @@ create table Foglalas(
     FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
     PRIMARY KEY(id)
 );
+create table Jegy(
+    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
+    utas_kernev VARCHAR2(70),
+    utas_veznev VARCHAR2(70),
+    utas_szulido DATE,
+    ules INT,
+    becsekkolas NUMBER DEFAULT 0,
+    ar INT,
+    foglalas_id INT,
+    PRIMARY KEY(id),
+    FOREIGN KEY(foglalas_id) REFERENCES Foglalas(id) ON DELETE CASCADE
+);
 create table Feladott_poggyasz(
     id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
     poggyasz_id INT,
@@ -77,22 +89,16 @@ create table Ertekeles(
     FOREIGN KEY(felhasznalo_id) REFERENCES Felhasznalo(id) ON DELETE CASCADE,
     FOREIGN KEY(legitarsasag_id) REFERENCES Legitarsasag(id) ON DELETE CASCADE
 );
-create table Jegy(
-    id NUMBER GENERATED ALWAYS as IDENTITY(START with 1 INCREMENT by 1),
-    utas_kernev VARCHAR2(70),
-    utas_veznev VARCHAR2(70),
-    utas_szulido DATE,
-    ules INT,
-    becsekkolas NUMBER DEFAULT 0,
-    ar INT,
-    foglalas_id INT,
-    PRIMARY KEY(id),
-    FOREIGN KEY(foglalas_id) REFERENCES Foglalas(id) ON DELETE CASCADE
-);
+
 
 -- *** End of the table creation block  ***
 
 -- *** Start of the insert data block ***
+
+-- Felhasznalo
+-- jelszók: almafa1234, barnaboritek
+INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Olá','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Tar','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Juh','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Kel','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Juh','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Mé','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Hor','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Fek','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Ol�','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Sza','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Tar','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Pap','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Kov','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Ill','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Hö','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Tak','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Rá','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Lak','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Kel','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Hö','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Ill','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Hö','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Szi','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Tö','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Kel','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Ill','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Ol�','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Tar','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Né','b4886ee938d408747e7bf136147f3c97daf0c18c');INSERT INTO felhasznalo (felhasznalonev, jelszo) VALUES ('Lak','1e3aee309d0978bf45d2cb25d1de2e2e8c1631b0');
+
 
 -- Legitarsasag
 INSERT INTO Legitarsasag (nev) VALUES ('Wizz Air');
@@ -225,81 +231,6 @@ INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Házi kedvenc', 5, 80
 INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Személyzet által feladott csomag', 23, 8000, '56x45x25cm');
 INSERT INTO Poggyasz (elnevezes, suly, ar, meret) VALUES ('Díszpoggyász', 20, 10000, '55x35x20cm');
 
---Felhasznalo 
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('David','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Alex','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Maria','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Anna','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Marco','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Antonio','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Daniel','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Andrea','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Laura','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Ali','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Jose','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sandra','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sara','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Carlos','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Ana','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Michael','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Marie','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Francesco','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mehmet','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Marta','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sarah','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('John','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Luca','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Martin','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Murat','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mario','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Juan','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Thomas','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Giuseppe','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Chris','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Peter','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mustafa','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Jessica','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mohamed','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Monika','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Elena','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Robert','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Manuel','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Christian','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Roberto','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Kevin','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Pedro','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Patrick','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Ahmet','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Luis','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Cristina','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Jan','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Paul','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Patricia','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Eva','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Ahmed','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mary','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Eric','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Alessandro','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Miguel','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sergio','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Tony','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Alexandra','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Ivan','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Vanessa','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Julie','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Alberto','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Nicolas','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sonia','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Silvia','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Claudia','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Julien','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Max','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Adam','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Mike','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Hakan','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Sabrina','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Marina','08c324f90200a641d9c4ecd40c6a4b09');
-INSERT INTO Felhasznalo (felhasznalonev, jelszo) VALUES ('Marc','08c324f90200a641d9c4ecd40c6a4b09');
 
 -- Repulo 
 INSERT INTO Repulo (max_ferohely, model, osztaly, erkezo_repuloter_id, indulasi_ido, indulasi_datum, erkezesi_ido, erkezesi_datum, legitarsasag_id, indulo_repuloter_id, jegy_ar) VALUES (160, 'Airbus A320neo', 'Economy', 2, '14:00', TO_DATE('2023-03-12', 'YYYY-MM-DD'), '16:00', TO_DATE('2023-03-12', 'YYYY-MM-DD'), 2, 3, 18000);
@@ -384,7 +315,6 @@ DECLARE
   v_foglalas_id NUMBER;
   v_max_ferohely NUMBER;
   v_ules NUMBER;
-  v_ar NUMBER;
   v_random_id NUMBER;
   v_ertekeles_datum DATE;
 
@@ -459,8 +389,8 @@ BEGIN
 
   FOR i IN 1..100 LOOP
   v_fizetesi_mod := fizetesi_mod_list(random_index(fizetesi_mod_list.COUNT));
-  INSERT INTO Jegy (fizetve, fizetes_mod, repulo_id, felhasznalo_id)
-    VALUES(DBMS_RANDOM.VALUE(0,1) ,v_fizetesi_mod, (SELECT id
+  INSERT INTO Foglalas (fizetve, fizetes_mod, repulo_id, felhasznalo_id)
+    VALUES(round(DBMS_RANDOM.VALUE(0,1)) ,v_fizetesi_mod, (SELECT id
                                                     FROM (SELECT Repulo.id
                                                          FROM Repulo
                                                          ORDER BY DBMS_RANDOM.VALUE)
@@ -471,6 +401,25 @@ BEGIN
                                                          ORDER BY DBMS_RANDOM.VALUE)
                                                    WHERE ROWNUM = 1));
   END LOOP;
+   FOR i IN 1..100 LOOP
+    v_utas_vezeteknev := utas_vezeteknev_list(random_index(utas_vezeteknev_list.COUNT));
+    v_utas_keresztnev := utas_keresztnev_list(random_index(utas_keresztnev_list.COUNT));
+    v_utas_szuletesi_datum := random_date(TO_DATE('1950-01-01', 'YYYY-MM-DD'), SYSDATE);
+    SELECT id INTO v_foglalas_id
+        FROM Foglalas 
+        ORDER BY DBMS_RANDOM.VALUE FETCH FIRST 1 ROW ONLY;
+    SELECT max_ferohely INTO v_max_ferohely 
+        FROM Repulo 
+        WHERE id =(SELECT repulo_id 
+                    FROM Foglalas 
+                    WHERE id = v_foglalas_id);
+
+    v_ules := random_ules(v_max_ferohely);
+    
+    INSERT INTO Jegy (utas_kernev, utas_veznev, utas_szulido, ules, becsekkolas, ar, foglalas_id) 
+    VALUES (v_utas_keresztnev, v_utas_vezeteknev, v_utas_szuletesi_datum, v_ules, round(DBMS_RANDOM.VALUE(0,1)), round(DBMS_RANDOM.VALUE(20000,130000)), v_foglalas_id);
+  END LOOP;
+  
   FOR i in 1..100 LOOP
 
   INSERT INTO Feladott_poggyasz(poggyasz_id,jegy_id)
@@ -484,34 +433,6 @@ BEGIN
 					FROM Jegy 
 					ORDER BY DBMS_RANDOM.VALUE)
 			WHERE ROWNUM = 1));
-  END LOOP;
-  
-  FOR i IN 1..100 LOOP
-    v_utas_vezeteknev := utas_vezeteknev_list(random_index(utas_vezeteknev_list.COUNT));
-    v_utas_keresztnev := utas_keresztnev_list(random_index(utas_keresztnev_list.COUNT));
-    v_utas_szuletesi_datum := random_date(TO_DATE('1950-01-01', 'YYYY-MM-DD'), SYSDATE);
-    SELECT id INTO v_foglalas_id
-        FROM Foglalas 
-        ORDER BY DBMS_RANDOM.VALUE FETCH FIRST 1 ROW ONLY;
-    SELECT max_ferohely INTO v_max_ferohely 
-        FROM Repulo 
-        WHERE id =(SELECT repulo_id 
-                    FROM Foglalas 
-                    WHERE id = v_foglalas_id);
-
-    SELECT (COALESCE(SUM(Poggyasz.ar), 0) + COALESCE(SUM(Repulo.jegy_ar),0)) INTO v_ar 
-    FROM Jegy
-    INNER JOIN Feladott_poggyasz ON Jegy.id = Feladott_poggyasz.jegy_id 
-    INNER JOIN Poggyasz ON Feladott_poggyasz.id = Poggyasz.id 
-    INNER JOIN Foglalas ON Jegy.foglalas_id = Foglalas.id
-    INNER JOIN Repulo ON Foglalas.repulo_id = Repulo.id
-    WHERE Foglalas.id = v_foglalas_id;
-
-
-    v_ules := random_ules(v_max_ferohely);
-    
-    INSERT INTO Jegy (utas_kernev, utas_veznev, utas_szulido, ules, becsekkolas, ar, foglalas_id) 
-    VALUES (v_utas_keresztnev, v_utas_vezeteknev, v_utas_szuletesi_datum, v_ules, DBMS_RANDOM.VALUE(0,1), v_ar, v_foglalas_id);
   END LOOP;
   COMMIT;
 END;
