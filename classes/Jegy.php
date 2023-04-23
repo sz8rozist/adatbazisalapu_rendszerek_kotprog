@@ -127,6 +127,16 @@ class Jegy
         $query = $this->db->select("SELECT repulo.jegy_ar FROM repulo, jegy, jegy_adatok WHERE jegy.repulo_id = repulo.id AND jegy_adatok.jegy_id = jegy.id AND jegy.id = :jegy_id", array(":jegy_id" => $jegy_id));
         $obj = $this->db->fetchObject($query);
         return $obj->JEGY_AR;
+    }
 
+    public function getFoglalasokByUserId($user_id){
+        $query = $this->db->select("SELECT foglalas.*, repulo.indulasi_ido, repulo.erkezesi_ido, repulo.indulasi_datum, repulo.erkezesi_datum, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.indulo_repuloter_id) as indulasi_repter, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.erkezo_repuloter_id) as erkezo_repter, (SELECT nev FROM legitarsasag WHERE id = repulo.legitarsasag_id) as legitarsasag FROM foglalas, repulo WHERE foglalas.repulo_id = repulo.id AND foglalas.felhasznalo_id = :user_id", array(":user_id" => $user_id));
+        $foglalasok = array();
+        while ($row = $this->db->fetchArray($query)) {
+            $row["ERKEZESI_DATUM"] = date("Y-m-d", strtotime($row["ERKEZESI_DATUM"]));
+            $row["INDULASI_DATUM"] = date("Y-m-d", strtotime($row["INDULASI_DATUM"]));
+            array_push($foglalasok, $row);
+        }
+        return $foglalasok;
     }
 }

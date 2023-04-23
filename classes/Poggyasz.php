@@ -13,11 +13,11 @@ class Poggyasz{
 
     public function getPoggyaszok(){
         $query = $this->db->select("SELECT * FROM poggyasz");
-        $repterek = Array();
+        $poggyasz = Array();
         while($row = $this->db->fetchArray($query)){
-            array_push($repterek,$row);
+            array_push($poggyasz,$row);
         }
-        return $repterek;
+        return $poggyasz;
     }
 
     public function getPoggyaszById($id){
@@ -27,6 +27,10 @@ class Poggyasz{
 
     public function delete($id){
         $this->db->delete("poggyasz","id = :id",array(":id" => $id));
+    }
+
+    public function deleteFeladottPoggyaszok($id){
+        $this->db->delete("feladott_poggyasz", "id = :id", array(":id" => $id));
     }
 
     public function update($id, $elnevezes, $suly, $meret, $ar){
@@ -68,5 +72,14 @@ class Poggyasz{
             "msg" => $msg
         ];
         return json_encode($response);
+    }
+
+    public function getPoggyaszByJegyId($jegy_id){
+        $query = $this->db->select("SELECT poggyasz.*, feladott_poggyasz.id as f_id FROM poggyasz INNER JOIN feladott_poggyasz ON poggyasz.id = feladott_poggyasz.poggyasz_id WHERE feladott_poggyasz.jegy_id = :jegy_id", array(":jegy_id" => $jegy_id));
+        $poggyasz = Array();
+        while($row = $this->db->fetchArray($query)){
+            array_push($poggyasz,$row);
+        }
+        return $poggyasz;
     }
 }

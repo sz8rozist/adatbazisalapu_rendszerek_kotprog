@@ -392,10 +392,9 @@ function navbar()
             ' . $_SESSION["username"] . '
           </a>
           <div class="navbar-dropdown is-right">
-            <a href="#" class="navbar-item">
-              Profile
+            <a href="foglalasaim.php" class="navbar-item">
+              Foglalásaim
             </a>
-            <a href="#" class="navbar-item">Settings</a>
             <hr class="navbar-divider" />
             <a href="logout.php" class="navbar-item">Kilépés</a>
           </div>
