@@ -3,14 +3,14 @@ require_once("init.php");
 if (empty($_SESSION) || !isset($_GET["jegy_id"])) header("location: index.php");
 
 template_header("Poggyászok");
-navbar();
+dashboardNavbar();
 
 $p = new Poggyasz();
 $poggyaszok = $p->getPoggyaszByJegyId($_GET["jegy_id"]);
 
 if (isset($_GET["delete"])) {
     $p->deleteFeladottPoggyaszok($_GET["delete"]);
-    header("location: jegy_poggyasz.php?jegy_id=" . $_GET["jegy_id"]);
+    header("location: admin_feladott_poggyasz.php?jegy_id=" . $_GET["jegy_id"]);
 }
 ?>
 <div class="container is-fullhd mt-5">
@@ -21,7 +21,7 @@ if (isset($_GET["delete"])) {
             </h1>
         </div>
         <div class="column has-text-right">
-            <a href="poggyasz_feladas.php?jegy_id=<?=$_GET['jegy_id']?>" class="button is-success">Poggyász feladása</a>
+            <a href="admin_poggyasz_feladas.php?jegy_id=<?=$_GET['jegy_id']?>" class="button is-success">Poggyász feladása</a>
         </div>
     </div>
     <div class="columns is-variable is-desktop">
@@ -45,7 +45,7 @@ if (isset($_GET["delete"])) {
                                 <td><?php echo $poggyasz["MERET"]; ?></td>
                                 <td><?php echo $poggyasz["AR"]; ?></td>
                                 <td>
-                                    <a href="jegy_poggyasz.php?jegy_id=<?= $_GET["jegy_id"] ?>&delete=<?= $poggyasz["F_ID"] ?>" class="button is-danger">Törlés</a>
+                                    <a href="admin_feladott_poggyasz.php?jegy_id=<?= $_GET["jegy_id"] ?>&delete=<?= $poggyasz["F_ID"] ?>" class="button is-danger">Törlés</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

@@ -1,0 +1,32 @@
+Legolcsóbb repülőjegyek országonként
+
+SELECT MIN(repulo.jegy_ar) as jegy_ar, repuloter.orszag FROM repulo, repuloter
+WHERE repulo.indulo_repuloter_id = repuloter.id GROUP BY repuloter.orszag
+
+10 Legnépszerűbb légitársaságok
+
+SELECT legitarsasag.nev, ertekeles.csillag FROM legitarsasag INNER JOIN ertekeles ON ertekeles.legitarsasag_id = legitarsasag.id
+WHERE ertekeles.csillag > 4 GROUP BY legitarsasag.nev, ertekeles.csillag FETCH FIRST 10 ROWS ONLY
+
+
+Légitársaságonként a legfiatalabb utazók
+
+SELECT legitarsasag.nev, MAX(jegy.utas_szulido) as szulido FROM legitarsasag INNER JOIN repulo ON legitarsasag.id = repulo.legitarsasag_id INNER JOIN foglalas ON repulo.id = foglalas.repulo_id INNER JOIN jegy ON foglalas.id = jegy.foglalas_id
+GROUP BY legitarsasag.nev
+
+
+Légitársaságonként a legidősebb utazók
+
+SELECT legitarsasag.nev, MIN(jegy.utas_szulido) as szulido FROM legitarsasag INNER JOIN repulo ON legitarsasag.id = repulo.legitarsasag_id INNER JOIN foglalas ON repulo.id = foglalas.repulo_id INNER JOIN jegy ON foglalas.id = jegy.foglalas_id
+GROUP BY legitarsasag.nev
+
+
+Foglalás: Fizetési módonként összeadja a jegy árakat:
+
+SELECT foglalas.fizetes_mod, SUM(jegy.ar) as jegyar FROM foglalas, jegy WHERE foglalas.id = jegy.foglalas_id GROUP BY foglalas.fizetes_mod
+
+Légitársaságonkénti kifizetett jegyek darabszáma
+
+SELECT legitarsasag.nev, COUNT(jegy.id) as count FROM legitarsasag INNER JOIN repulo ON legitarsasag.id = repulo.legitarsasag_id INNER JOIN foglalas ON repulo.id = foglalas.repulo_id INNER JOIN jegy ON foglalas.id = jegy.foglalas_id
+WHERE foglalas.fizetve = 1 GROUP BY legitarsasag.nev
+

@@ -106,9 +106,9 @@ function searchBox()
     $honnan_select .= "<option>Nincs rögzítve a rendszerben elérhető város</option>";
   } else {
     foreach ($varosok as $varos) {
-      if(isset($_POST["indulasi_repuloter_id"]) && $_POST["indulasi_repuloter_id"] == $varos["ID"]){
+      if (isset($_POST["indulasi_repuloter_id"]) && $_POST["indulasi_repuloter_id"] == $varos["ID"]) {
         $honnan_select .= "<option selected value='" . $varos["ID"] . "'>" . $varos["VAROS"] . "</option>";
-      }else{
+      } else {
         $honnan_select .= "<option value='" . $varos["ID"] . "'>" . $varos["VAROS"] . "</option>";
       }
     }
@@ -120,9 +120,9 @@ function searchBox()
     $hova_select .= "<option>Nincs rögzítve a rendszerben elérhető város</option>";
   } else {
     foreach ($varosok as $varos) {
-      if(isset($_POST["erkezesi_repuloter_id"]) && $_POST["erkezesi_repuloter_id"] == $varos["ID"]){
+      if (isset($_POST["erkezesi_repuloter_id"]) && $_POST["erkezesi_repuloter_id"] == $varos["ID"]) {
         $hova_select .= "<option selected value='" . $varos["ID"] . "'>" . $varos["VAROS"] . "</option>";
-      }else{
+      } else {
         $hova_select .= "<option value='" . $varos["ID"] . "'>" . $varos["VAROS"] . "</option>";
       }
     }
@@ -137,9 +137,9 @@ function searchBox()
     $osztaly_select .= "<option>Nincs rögzítve a rendszerben elérhető repülőjárat</option>";
   } else {
     foreach ($osztalyok as $osztaly) {
-      if(isset($_POST["osztaly"]) && $_POST["osztaly"] == $osztaly["OSZTALY"]){
+      if (isset($_POST["osztaly"]) && $_POST["osztaly"] == $osztaly["OSZTALY"]) {
         $osztaly_select .= "<option selected value='" . $osztaly["OSZTALY"] . "'>" . $osztaly["OSZTALY"] . "</option>";
-      }else{
+      } else {
         $osztaly_select .= "<option value='" . $osztaly["OSZTALY"] . "'>" . $osztaly["OSZTALY"] . "</option>";
       }
     }
@@ -174,19 +174,19 @@ function searchBox()
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                   '.$honnan_select.'
+                   ' . $honnan_select . '
                   </div>
                 </div>
               </div>
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                    '.$hova_select.'
+                    ' . $hova_select . '
                   </div>
                 </div>
               </div>
               <div class="field">
-                <input class="input" value="'.$indulasi_datum_val.'" name="indulasi_datum" type="date" placeholder="Name" />
+                <input class="input" value="' . $indulasi_datum_val . '" name="indulasi_datum" type="date" placeholder="Name" />
               </div>
               <div class="field">
                 <input
@@ -200,7 +200,7 @@ function searchBox()
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                    '.$osztaly_select.'
+                    ' . $osztaly_select . '
                   </div>
                 </div>
               </div>
@@ -216,22 +216,22 @@ function searchBox()
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                   '.$honnan_select.'
+                   ' . $honnan_select . '
                   </div>
                 </div>
               </div>
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                    '.$hova_select.'
+                    ' . $hova_select . '
                   </div>
                 </div>
               </div>
               <div class="field">
-                <input class="input" value="'.$indulasi_datum_val.'" name="indulasi_datum" type="date" placeholder="Name" />
+                <input class="input" value="' . $indulasi_datum_val . '" name="indulasi_datum" type="date" placeholder="Name" />
               </div>
               <div class="field">
-                <input class="input" type="date" value="'.$erkezesi_datum_val.'" name="erkezesi_datum" placeholder="Email" value="" />
+                <input class="input" type="date" value="' . $erkezesi_datum_val . '" name="erkezesi_datum" placeholder="Email" value="" />
               </div>
               <div class="field">
                 <input
@@ -245,7 +245,7 @@ function searchBox()
               <div class="field is-narrow">
                 <div class="control">
                   <div class="select is-fullwidth">
-                  '.$osztaly_select.'
+                  ' . $osztaly_select . '
                   </div>
                 </div>
               </div>
@@ -302,31 +302,17 @@ function dashboardNavbar()
                   Foglalások
                 </a>
                 <div class="navbar-item has-dropdown is-hoverable">
-                <a href="#" class="navbar-link">
-                  Poggyász
-                </a>
-                <div class="navbar-dropdown is-right">
-                  <a href="poggyasz.php" class="navbar-item">
-                    Poggyászok
+                <a href="poggyasz.php" class="navbar-item">
+                    Poggyász
                   </a>
-                  <a href="logout.php" class="navbar-item">Feladott poggyászok</a>
-                </div>
               </div>
               </div>
               <div class="navbar-end">
-                <a href="#" class="navbar-item">
-                  Notifications
-                </a>
                 <div class="navbar-item has-dropdown is-hoverable">
                   <a href="#" class="navbar-link">
                     ' . $_SESSION["username"] . '
                   </a>
                   <div class="navbar-dropdown is-right">
-                    <a href="profile.php" class="navbar-item">
-                      Profile
-                    </a>
-                    <a href="#" class="navbar-item">Felhasználók</a>
-                    <hr class="navbar-divider" />
                     <a href="logout.php" class="navbar-item">Kilépés</a>
                   </div>
                 </div>
@@ -341,7 +327,7 @@ function navbar()
 {
   echo '<nav class="navbar is-info" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
+        <a class="navbar-item" href="index.php">
           <img src="img/logo.png" >
         </a>
     
@@ -354,33 +340,11 @@ function navbar()
     
       <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item">
-            Home
+          <a href="index.php" class="navbar-item">
+            Kezdőlap
           </a>
     
-          <a class="navbar-item">
-            Documentation
-          </a>
-    
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">
-              More
-            </a>
-    
-            <div class="navbar-dropdown">
-              <a class="navbar-item">
-                About
-              </a>
-              <a class="navbar-item">
-                Jobs
-              </a>
-              <a class="navbar-item">
-                Contact
-              </a>
-              <hr class="navbar-divider">
-              <a class="navbar-item">
-                Report an issue
-              </a>
+          
             </div>
           </div>
         </div>
@@ -395,6 +359,9 @@ function navbar()
             <a href="foglalasaim.php" class="navbar-item">
               Foglalásaim
             </a>
+            <a href="ertekeles.php" class="navbar-item">
+            Légitársaságok értékelése
+          </a>
             <hr class="navbar-divider" />
             <a href="logout.php" class="navbar-item">Kilépés</a>
           </div>

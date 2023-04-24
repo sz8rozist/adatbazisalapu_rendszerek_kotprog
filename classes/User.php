@@ -29,7 +29,6 @@ class User{
         $result = $this->db->fetchAll($check_user_query);
         $rows = $this->db->numRows($check_user_query);
         if($rows == 0){
-            //autoincrement id-t meg kell nézni.
             $signup = $this->db->insert("felhasznalo",array("felhasznalonev"=> ":username","jelszo" => ":password","jogosultsag" => ":jogosultsag"), array(":username" => $username, ":password" => $password, ":jogosultsag" => 0));
             return $signup;
         }else{

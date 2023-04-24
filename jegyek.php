@@ -5,10 +5,25 @@ if (empty($_SESSION) || !isset($_GET["foglalas_id"])) header("location: index.ph
 template_header("Foglalási adatok");
 navbar();
 $f = new Jegy();
+$p = new Poggyasz();
 $adatok = $f->getFoglalasAdatok($_GET["foglalas_id"]);
-if(isset($_GET["delete"])){
+
+foreach ($adatok as $key => $value) {
+    $adatok[$key]["poggyaszok"] = $p->getPoggyaszByJegyId($adatok[$key]["ID"]);
+    if (!empty($adatok[$key]["poggyaszok"])) {
+        foreach ($adatok[$key]["poggyaszok"] as $k => $v) {
+            $adatok[$key]["AR"] += $adatok[$key]["poggyaszok"][$k]["AR"];
+        }
+    }
+}
+if (isset($_GET["delete"])) {
     $f->deleteJegyAdat($_GET["delete"]);
-    header("location: jegyek.php?foglalas_id=".$_GET["foglalas_id"]);
+    header("location: jegyek.php?foglalas_id=" . $_GET["foglalas_id"]);
+}
+
+if(isset($_GET["csekk"])){
+    $f->csekkolas($_GET["csekk"]);
+    header("location: jegyek.php?foglalas_id=" . $_GET["foglalas_id"]);
 }
 ?>
 <div class="container is-fullhd mt-5">
@@ -44,8 +59,9 @@ if(isset($_GET["delete"])){
                                 <td><?php echo $jarat["AR"]; ?></td>
                                 <td><?php echo ($jarat["BECSEKKOLAS"] == "0") ? '<i style="color: red; font-weight: bold;" class="fa-solid fa-square-xmark"></i>' : '<i style="color: green; font-weight: bold;" class="fa-solid fa-check"></i>'; ?></td>
                                 <td>
-                                <a href="jegy_poggyasz.php?jegy_id=<?=$_GET["foglalas_id"]?>" class="button is-success">Poggyászok</a>
-                                    <a href="jegyek.php?foglalas_id=<?=$_GET["foglalas_id"]?>&delete<?= $jarat["ID"] ?>" class="button is-danger">Törlés</a>
+                                    <a href="jegy_poggyasz.php?jegy_id=<?= $jarat["ID"] ?>" class="button is-success">Poggyászok</a>
+                                    <a href="jegyek.php?foglalas_id=<?= $_GET["foglalas_id"] ?>&csekk=<?=$jarat["ID"]?>" class="button is-warning">Becsekkolás</a>
+                                    <a href="jegyek.php?foglalas_id=<?= $_GET["foglalas_id"] ?>&delete<?= $jarat["ID"] ?>" class="button is-danger">Törlés</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

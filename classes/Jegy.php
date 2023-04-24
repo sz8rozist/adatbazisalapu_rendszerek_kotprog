@@ -92,11 +92,11 @@ class Jegy
     public function updateJegy_adatok($jegy_adatok_id, $utas_veznev, $utas_kernev, $utas_szulido, $becsekkolas)
     {
         if (!empty($utas_veznev) && !empty($utas_kernev) && !empty($utas_szulido)) {
-            $update = $this->db->update("jegy_adatok", array("utas_veznev" => ":utas_veznev", "utas_kernev" => ":utas_kernev", "utas_szulido" => ":utas_szulido", "becsekkolas" => ":becsekkolas"), "id = '" . $jegy_adatok_id. "'", array(":utas_veznev" => $utas_veznev, ":utas_kernev" => $utas_kernev, ":utas_szulido" => date("y-M-d", strtotime($utas_szulido)), ":becsekkolas" => $becsekkolas));
+            $update = $this->db->update("jegy", array("utas_veznev" => ":utas_veznev", "utas_kernev" => ":utas_kernev", "utas_szulido" => ":utas_szulido", "becsekkolas" => ":becsekkolas"), "id = '" . $jegy_adatok_id . "'", array(":utas_veznev" => $utas_veznev, ":utas_kernev" => $utas_kernev, ":utas_szulido" => date("y-M-d", strtotime($utas_szulido)), ":becsekkolas" => $becsekkolas));
             if (!$update) {
                 $msg = "Sikertelen szerkesztés";
             }
-        }else{
+        } else {
             $msg = "Minden mező kitöltése kötelező!";
         }
 
@@ -107,13 +107,14 @@ class Jegy
         return json_encode($response);
     }
 
-    public function insertJegyAdatok($jegy_id,$utas_veznev, $utas_kernev, $utas_szulido, $becsekkolas, $ar){
+    public function insertJegyAdatok($jegy_id, $utas_veznev, $utas_kernev, $utas_szulido, $becsekkolas, $ar)
+    {
         if (!empty($utas_veznev) && !empty($utas_kernev) && !empty($utas_szulido)) {
-            $insert = $this->db->insert("jegy_adatok", array("utas_veznev" => ":utas_veznev", "utas_kernev" => ":utas_kernev", "utas_szulido" => ":utas_szulido", "becsekkolas" => ":becsekkolas", "jegy_id" => ":jegy_id", "ar" => ":ar"), array(":utas_veznev" => $utas_veznev, ":utas_kernev" => $utas_kernev, ":utas_szulido" => date("y-M-d", strtotime($utas_szulido)), ":becsekkolas" => $becsekkolas, ":jegy_id" => $jegy_id, ":ar" => $ar));
+            $insert = $this->db->insert("jegy", array("utas_veznev" => ":utas_veznev", "utas_kernev" => ":utas_kernev", "utas_szulido" => ":utas_szulido", "becsekkolas" => ":becsekkolas", "foglalas_id" => ":foglalas_id", "ar" => ":ar"), array(":utas_veznev" => $utas_veznev, ":utas_kernev" => $utas_kernev, ":utas_szulido" => date("y-M-d", strtotime($utas_szulido)), ":becsekkolas" => $becsekkolas, ":foglalas_id" => $jegy_id, ":ar" => $ar));
             if (!$insert) {
                 $msg = "Sikertelen hozzáadás";
             }
-        }else{
+        } else {
             $msg = "Minden mező kitöltése kötelező!";
         }
 
@@ -123,13 +124,15 @@ class Jegy
         return json_encode($response);
     }
 
-    public function getJegyAr($jegy_id){
-        $query = $this->db->select("SELECT repulo.jegy_ar FROM repulo, jegy, jegy_adatok WHERE jegy.repulo_id = repulo.id AND jegy_adatok.jegy_id = jegy.id AND jegy.id = :jegy_id", array(":jegy_id" => $jegy_id));
+    public function getJegyAr($jegy_id)
+    {
+        $query = $this->db->select("SELECT repulo.jegy_ar FROM repulo, jegy, foglalas WHERE jegy.foglalas_id = foglalas.id AND foglalas.repulo_id = repulo.id AND jegy.id = :jegy_id", array(":jegy_id" => $jegy_id));
         $obj = $this->db->fetchObject($query);
         return $obj->JEGY_AR;
     }
 
-    public function getFoglalasokByUserId($user_id){
+    public function getFoglalasokByUserId($user_id)
+    {
         $query = $this->db->select("SELECT foglalas.*, repulo.indulasi_ido, repulo.erkezesi_ido, repulo.indulasi_datum, repulo.erkezesi_datum, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.indulo_repuloter_id) as indulasi_repter, (SELECT repuloter.nev FROM repuloter WHERE repuloter.id = repulo.erkezo_repuloter_id) as erkezo_repter, (SELECT nev FROM legitarsasag WHERE id = repulo.legitarsasag_id) as legitarsasag FROM foglalas, repulo WHERE foglalas.repulo_id = repulo.id AND foglalas.felhasznalo_id = :user_id", array(":user_id" => $user_id));
         $foglalasok = array();
         while ($row = $this->db->fetchArray($query)) {
@@ -138,5 +141,43 @@ class Jegy
             array_push($foglalasok, $row);
         }
         return $foglalasok;
+    }
+
+
+    public function csekkolas($jegy_id)
+    {
+        $this->db->update("jegy", array("becsekkolas" => ":becsekkolas"), "id = '" . $jegy_id . "'", array(":becsekkolas" => "1"));
+    }
+
+    public function legolcsobbJegyOrszagonkent()
+    {
+        $query = $this->db->select("SELECT MIN(repulo.jegy_ar) as jegy_ar, repuloter.orszag FROM repulo, repuloter
+        WHERE repulo.indulo_repuloter_id = repuloter.id GROUP BY repuloter.orszag");
+        $data = array();
+        while ($row = $this->db->fetchArray($query)) {
+            array_push($data, $row);
+        }
+        return $data;
+    }
+
+    public function fizmod_ossz_jegyar()
+    {
+        $query = $this->db->select("SELECT foglalas.fizetes_mod, SUM(jegy.ar) as jegyar FROM foglalas, jegy WHERE foglalas.id = jegy.foglalas_id GROUP BY foglalas.fizetes_mod");
+        $data = array();
+        while ($row = $this->db->fetchArray($query)) {
+            array_push($data, $row);
+        }
+        return $data;
+    }
+
+    public function kifizetettJegyekSzama()
+    {
+        $query = $this->db->select("  SELECT legitarsasag.nev, COUNT(jegy.id) as count FROM legitarsasag INNER JOIN repulo ON legitarsasag.id = repulo.legitarsasag_id INNER JOIN foglalas ON repulo.id = foglalas.repulo_id INNER JOIN jegy ON foglalas.id = jegy.foglalas_id
+WHERE foglalas.fizetve = 1 GROUP BY legitarsasag.nev");
+        $data = array();
+        while ($row = $this->db->fetchArray($query)) {
+            array_push($data, $row);
+        }
+        return $data;
     }
 }

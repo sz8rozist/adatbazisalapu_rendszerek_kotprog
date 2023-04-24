@@ -49,6 +49,7 @@ if (isset($_GET["delete"])) {
                                 <td><?php echo $foglalas["AR"] ?></td>
                                 <td><?php echo ($foglalas["BECSEKKOLAS"] == "0") ? '<i style="color: red; font-weight: bold;" class="fa-solid fa-square-xmark"></i>' : '<i style="color: green; font-weight: bold;" class="fa-solid fa-check"></i>'; ?></td>
                                 <td>
+                                <a href="admin_feladott_poggyasz.php?jegy_id=<?=$_GET["jegy_id"]?>"><i class="fa-solid fa-bag-shopping"></i></a>
                                     <a href="edit_booking_data.php?jegy_id=<?= $_GET["jegy_id"] ?>&jegy_adatok_id=<?= $foglalas["ID"] ?>"><i class="fa-solid fa-pen-to-square"></i></a>
                                     <a href="foglalas_adatok.php?jegy_id=<?= $_GET["jegy_id"] ?>&delete=<?= $foglalas["ID"] ?>"><i class="fa-solid fa-trash-arrow-up"></i></a>
                                 </td>

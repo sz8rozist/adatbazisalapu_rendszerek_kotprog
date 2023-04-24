@@ -10,14 +10,13 @@ dashboardNavbar();
 $jegy = new Jegy();
 if(isset($_GET["jegy_adatok_id"])){
     $row = $jegy->getJegyAdatok($_GET["jegy_adatok_id"]);
-    var_dump($row);
 }
 if(isset($_POST["edit_foglalas_data"])){
     $response = json_decode($jegy->updateJegy_adatok($_GET["jegy_adatok_id"], $_POST["utas_veznev"], $_POST["utas_kernev"], $_POST["utas_szulido"], $_POST["becsekkolas"]));
     if(empty($response->msg)) header("location: foglalas_adatok.php?jegy_id=".$_GET["jegy_id"]);
 }
 if(isset($_POST["new_foglalas_data"])){
-    $response = json_decode($jegy->updateJegy_adatok($_GET["jegy_id"], $_POST["utas_veznev"], $_POST["utas_kernev"], $_POST["utas_szulido"], $_POST["becsekkolas"]));
+    $response = json_decode($jegy->insertJegyAdatok($_GET["jegy_id"], $_POST["utas_veznev"], $_POST["utas_kernev"], $_POST["utas_szulido"], $_POST["becsekkolas"],$_POST["ar"]));
     if(empty($response->msg)) header("location: foglalas_adatok.php?jegy_id=".$_GET["jegy_id"]);
 }
 

@@ -1,0 +1,29 @@
+Ellenőrzi a poggyász táblába beszúrás vagy módosítás előtt az árat ha nagyobb mint 50 ezer akkor nem szúrja be.
+
+CREATE OR REPLACE TRIGGER poggyasz_ar_check
+BEFORE INSERT OR UPDATE ON poggyasz
+FOR EACH ROW
+DECLARE
+    max_ar NUMBER(10,2) := 50000;
+BEGIN
+    IF :NEW.ar > max_ar THEN
+        RAISE_APPLICATION_ERROR(-20001, 'The salary cannot exceed ' || to_char(max_ar));
+    END IF;
+END;
+/
+
+
+Utas születési ideje nem lehet az aktuális dátumnál régebbi
+
+
+CREATE OR REPLACE TRIGGER jegy_szulido_check
+BEFORE INSERT ON jegy
+FOR EACH ROW
+DECLARE
+    utas_szulido_limit DATE := SYSDATE();
+BEGIN
+    IF :NEW.utas_szulido > utas_szulido_limit THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Az utas születési ideje nem lehet később mint az aktuális dátum ' || to_char(utas_szulido_limit, 'YYYY-MM-DD'));
+    END IF;
+END;
+/
