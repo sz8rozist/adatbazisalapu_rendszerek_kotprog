@@ -370,9 +370,9 @@ function navbar()
     echo ' <div class="navbar-item">
           <div class="buttons">
             <button class="button is-info js-modal-trigger" data-target="modal-signup" aria-haspopup="true">
-              <strong>Sign up</strong>
+              <strong>Regisztráció</strong>
             </button>
-            <button class="button is-primary js-modal-trigger" data-target="modal-login" aria-haspopup="true">Login</button>
+            <button class="button is-primary js-modal-trigger" data-target="modal-login" aria-haspopup="true">Bejelentkezés</button>
           </div>
         </div>';
   }
