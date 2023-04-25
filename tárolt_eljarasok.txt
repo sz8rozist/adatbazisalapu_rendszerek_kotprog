@@ -1,0 +1,23 @@
+create or replace NONEDITIONABLE PROCEDURE create_repuloter (
+   p_nev     IN VARCHAR2,
+   p_varos      IN VARCHAR2,
+   p_orszag IN VARCHAR2
+) AS 
+BEGIN
+   INSERT INTO repuloter (nev, orszag, varos) 
+   VALUES (p_nev, p_varos, p_orszag);
+   COMMIT;
+END;
+
+
+
+create or replace NONEDITIONABLE PROCEDURE delete_repuloter (
+   p_id     IN NUMBER,
+) AS 
+BEGIN
+   DELETE FROM repuloter WHERE id = p_id;
+   COMMIT;
+END;
+
+
+

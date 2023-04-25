@@ -6,9 +6,11 @@ template_header("Vezérlőpult");
 dashboardNavbar();
 
 $p = new Poggyasz();
+$db = new Db();
 if(isset($_POST["new_poggyasz"])){
-      $response = json_decode($p->insert($_POST["elnevezes"], $_POST["suly"], $_POST["meret"], $_POST["ar"]));
-      if(empty($response->msg)) header("location: poggyasz.php");
+    //$response = json_decode($p->insert($_POST["elnevezes"], $_POST["suly"], $_POST["meret"], $_POST["ar"]));
+      //if(empty($response->msg)) header("location: poggyasz.php");
+      $db->poggyasz_tarolt_eljaras($_POST["elnevezes"], $_POST["suly"], $_POST["meret"], $_POST["ar"]);
 }
 if(isset($_GET["id"])){
     $row = $p->getPoggyaszById($_GET["id"]);
