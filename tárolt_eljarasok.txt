@@ -12,7 +12,7 @@ END;
 
 
 create or replace NONEDITIONABLE PROCEDURE delete_repuloter (
-   p_id     IN NUMBER,
+   p_id     IN NUMBER
 ) AS 
 BEGIN
    DELETE FROM repuloter WHERE id = p_id;

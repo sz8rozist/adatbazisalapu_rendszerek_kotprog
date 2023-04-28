@@ -6,16 +6,29 @@ template_header("Vezérlőpult");
 dashboardNavbar();
 
 $repter = new Repuloter();
-if(isset($_POST["new_repter"])){
-      $response = json_decode($repter->insert($_POST["nev"], $_POST["varos"], $_POST["orszag"]));
-      if(empty($response->msg)) header("location: repuloter.php");
+if (isset($_POST["new_repter"])) {
+    //$response = json_decode($repter->insert($_POST["nev"], $_POST["varos"], $_POST["orszag"]));
+    //if(empty($response->msg)) header("location: repuloter.php");
+    try {
+        $conn = oci_connect("SYSTEM", "oracle", "localhost/xe");
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+
+    $stmt = oci_parse($conn, "BEGIN create_repuloter(:nev, :varos, :orszag); END;");
+    oci_bind_by_name($stmt,":nev",$_POST["nev"]);
+    oci_bind_by_name($stmt,":varos",$_POST["varos"]);
+    oci_bind_by_name($stmt,":orszag",$_POST["orszag"]);
+    if(oci_execute($stmt)){
+        header("location: repuloter.php");
+    }
 }
-if(isset($_GET["id"])){
+if (isset($_GET["id"])) {
     $row = $repter->getRepterById($_GET["id"]);
 
-    if(isset($_POST["edit_repter"])){
+    if (isset($_POST["edit_repter"])) {
         $response = json_decode($repter->update($_GET["id"], $_POST["nev"], $_POST["varos"], $_POST["orszag"]));
-        if(empty($response->msg)) header("location: repuloter.php");
+        if (empty($response->msg)) header("location: repuloter.php");
     }
 }
 ?>

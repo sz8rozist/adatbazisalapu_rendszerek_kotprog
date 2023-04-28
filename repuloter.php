@@ -9,9 +9,19 @@ $repter = new Repuloter();
 $repterek = $repter->getRepterek();
 
 
-if(isset($_GET["delete"])){
-    $repter->delete($_GET["delete"]);
-    header("location: repuloter.php");
+if (isset($_GET["delete"])) {
+    // $repter->delete($_GET["delete"]);
+    try {
+        $conn = oci_connect("SYSTEM", "oracle", "localhost/xe");
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+
+    $stmt = oci_parse($conn, "BEGIN delete_repuloter(:id); END;");
+    oci_bind_by_name($stmt, ":id", $_GET["delete"]);
+    if (oci_execute($stmt)) {
+        header("location: repuloter.php");
+    }
 }
 
 ?>
