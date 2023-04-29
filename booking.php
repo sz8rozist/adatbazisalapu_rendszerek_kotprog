@@ -41,7 +41,7 @@ navbar();
                             </div>
                             <div class="field">
                                 <div class="control">
-                                    <input class="input" type="text" placeholder="Születési idő (1999-02-02)" name="utas_szulido[]">
+                                    <input class="input" type="date" placeholder="Születési idő (1999-02-02)" name="utas_szulido[]">
                                 </div>
                             </div>
                         </div>

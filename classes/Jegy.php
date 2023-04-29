@@ -16,6 +16,7 @@ class Jegy
 
     public function insert($booking)
     {
+        //echo "<pre>" . print_r($booking, true) . "</pre>";
         $msg = "";
         $jegy_insert = $this->db->insert("foglalas", array("fizetve" => ":fizetve", "fizetes_mod" => ":fizetes_mod", "repulo_id" => ":repulo_id", "felhasznalo_id" => ":felhasznalo_id"), array(":fizetve" => "0", ":fizetes_mod" => $booking["fizetes_mod"], ":repulo_id" => $booking["repulo_id"], ":felhasznalo_id" => $booking["felhasznalo_id"]));
         if (!$jegy_insert) {
@@ -172,7 +173,7 @@ class Jegy
 
     public function kifizetettJegyekSzama()
     {
-        $query = $this->db->select("  SELECT legitarsasag.nev, COUNT(jegy.id) as count FROM legitarsasag INNER JOIN repulo ON legitarsasag.id = repulo.legitarsasag_id INNER JOIN foglalas ON repulo.id = foglalas.repulo_id INNER JOIN jegy ON foglalas.id = jegy.foglalas_id
+        $query = $this->db->select(" SELECT legitarsasag.nev, COUNT(jegy.id) as count FROM legitarsasag INNER JOIN repulo ON legitarsasag.id = repulo.legitarsasag_id INNER JOIN foglalas ON repulo.id = foglalas.repulo_id INNER JOIN jegy ON foglalas.id = jegy.foglalas_id
 WHERE foglalas.fizetve = 1 GROUP BY legitarsasag.nev");
         $data = array();
         while ($row = $this->db->fetchArray($query)) {

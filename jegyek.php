@@ -61,7 +61,7 @@ if(isset($_GET["csekk"])){
                                 <td>
                                     <a href="jegy_poggyasz.php?jegy_id=<?= $jarat["ID"] ?>" class="button is-success">Poggyászok</a>
                                     <a href="jegyek.php?foglalas_id=<?= $_GET["foglalas_id"] ?>&csekk=<?=$jarat["ID"]?>" class="button is-warning">Becsekkolás</a>
-                                    <a href="jegyek.php?foglalas_id=<?= $_GET["foglalas_id"] ?>&delete<?= $jarat["ID"] ?>" class="button is-danger">Törlés</a>
+                                    <a href="jegyek.php?foglalas_id=<?= $_GET["foglalas_id"] ?>&delete=<?= $jarat["ID"] ?>" class="button is-danger">Törlés</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
