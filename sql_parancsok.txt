@@ -436,3 +436,50 @@ BEGIN
   END LOOP;
   COMMIT;
 END;
+
+CREATE OR REPLACE TRIGGER check_poggyasz_meret_format
+BEFORE INSERT OR UPDATE OF meret ON poggyasz
+FOR EACH ROW
+DECLARE
+  v_pattern VARCHAR2(9) := '^\d{2}[xX]\d{2}[xX]\d{2}$';
+BEGIN
+  IF :new.meret IS NOT NULL AND NOT REGEXP_LIKE(:new.meret,v_pattern) THEN
+    RAISE_APPLICATION_ERROR(-20001, 'Az adat formátuma nem megfelelő. Kérem, használjon például 20x20x20 formátumot.');
+  END IF;
+END;
+/
+
+
+CREATE OR REPLACE TRIGGER poggyasz_ar_check
+BEFORE INSERT OR UPDATE ON poggyasz
+FOR EACH ROW
+DECLARE
+    max_ar NUMBER(10,2) := 50000;
+BEGIN
+    IF :NEW.ar > max_ar THEN
+        RAISE_APPLICATION_ERROR(-20001, 'The salary cannot exceed ' || to_char(max_ar));
+    END IF;
+END;
+/
+
+
+create or replace PROCEDURE create_repuloter (
+   p_nev     IN VARCHAR2,
+   p_varos      IN VARCHAR2,
+   p_orszag IN VARCHAR2
+) AS 
+BEGIN
+   INSERT INTO repuloter (nev, orszag, varos) 
+   VALUES (p_nev, p_varos, p_orszag);
+   COMMIT;
+END;
+
+
+
+create or replace PROCEDURE delete_repuloter (
+   p_id     IN NUMBER
+) AS 
+BEGIN
+   DELETE FROM repuloter WHERE id = p_id;
+   COMMIT;
+END;

@@ -1,4 +1,4 @@
-create or replace NONEDITIONABLE PROCEDURE create_repuloter (
+create or replace PROCEDURE create_repuloter (
    p_nev     IN VARCHAR2,
    p_varos      IN VARCHAR2,
    p_orszag IN VARCHAR2
@@ -11,7 +11,7 @@ END;
 
 
 
-create or replace NONEDITIONABLE PROCEDURE delete_repuloter (
+create or replace PROCEDURE delete_repuloter (
    p_id     IN NUMBER
 ) AS 
 BEGIN

@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL & ~E_WARNING);
 require_once("init.php");
 if (empty($_SESSION)) header("location: index.php");
 
@@ -7,19 +8,47 @@ dashboardNavbar();
 
 $p = new Poggyasz();
 $db = new Db();
-if(isset($_POST["new_poggyasz"])){
-    $response = json_decode($p->insert($_POST["elnevezes"], $_POST["suly"], $_POST["meret"], $_POST["ar"]));
-    if(empty($response->msg)) header("location: poggyasz.php");
-    
+try {
+    $conn = oci_connect("SYSTEM", "oracle", "localhost/xe");
+} catch (Exception $e) {
+    echo $e->getMessage();
 }
-if(isset($_GET["id"])){
-    $row = $p->getPoggyaszById($_GET["id"]);
-
-    if(isset($_POST["edit_poggyasz"])){
-        $response = json_decode($p->update($_GET["id"], $_POST["elnevezes"], $_POST["suly"], $_POST["meret"], $_POST["ar"]));
-        if(empty($response->msg)) header("location: poggyasz.php");
+$err = "";
+if (isset($_POST["new_poggyasz"])) {
+    if (empty($_POST["elnevezes"]) || empty($_POST["suly"]) || empty($_POST["ar"]) || empty($_POST["meret"])) {
+        $err = "Minden mező kitöltése kötelező!";
+    } else {
+        //$response = json_decode($p->insert($_POST["elnevezes"], $_POST["suly"], $_POST["meret"], $_POST["ar"]));
+        // if(empty($response->msg)) header("location: poggyasz.php");
+        if (!is_numeric($_POST["ar"])) {
+            $err = "Az árnak számnak kell lennie!";
+        } else {
+            $stmt = oci_parse($conn, "INSERT INTO poggyasz(elnevezes, suly, ar, meret) VALUES(:elnevezes, :suly, :ar, :meret)");
+            oci_bind_by_name($stmt, ":elnevezes", $_POST["elnevezes"]);
+            oci_bind_by_name($stmt, ":suly", $_POST["suly"]);
+            oci_bind_by_name($stmt, ":ar", $_POST["ar"]);
+            oci_bind_by_name($stmt, ":meret", $_POST["meret"]);
+            if (oci_execute($stmt)) {
+                header("location: repuloter.php");
+            } else {
+                $error = oci_error($stmt);
+                $errorMessage = $error["message"];
+                $errorMessageParts = explode("ORA-", $errorMessage);
+                $err = $errorMessageParts[1];
+            }
+        }
     }
 }
+if (isset($_GET["id"])) {
+    $row = $p->getPoggyaszById($_GET["id"]);
+
+    if (isset($_POST["edit_poggyasz"])) {
+        // $response = json_decode($p->update($_GET["id"], $_POST["elnevezes"], $_POST["suly"], $_POST["meret"], $_POST["ar"]));
+        // if(empty($response->msg)) header("location: poggyasz.php");
+    }
+}
+
+$err = explode(":", $err);
 ?>
 <div class="container is-fullhd">
     <div class="columns is-variable is-desktop">
@@ -58,7 +87,7 @@ if(isset($_GET["id"])){
                     </div>
                 </div>
                 <div class="field">
-                    <div><?php echo (!empty($response)) ? $response->msg : ""; ?></div>
+                    <div><?php echo (!empty($err) && isset($err[1])) ? $err[1] : ""; ?></div>
                 </div>
                 <div class="field">
                     <button class="button is-success" type="submit" name="<?php echo (isset($_GET["id"])) ? "edit_poggyasz" : "new_poggyasz"; ?>">Mentés</button>

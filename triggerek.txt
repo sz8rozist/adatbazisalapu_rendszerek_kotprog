@@ -13,17 +13,17 @@ END;
 /
 
 
-Utas születési ideje nem lehet az aktuális dátumnál régebbi
+Poggyász méret formátum
 
-
-CREATE OR REPLACE TRIGGER jegy_szulido_check
-BEFORE INSERT ON jegy
+CREATE OR REPLACE TRIGGER check_poggyasz_meret_format
+BEFORE INSERT OR UPDATE OF meret ON poggyasz
 FOR EACH ROW
 DECLARE
-    utas_szulido_limit DATE := SYSDATE();
+  v_pattern VARCHAR2(9) := '^\d{2}[xX]\d{2}[xX]\d{2}$';
 BEGIN
-    IF :NEW.utas_szulido > utas_szulido_limit THEN
-        RAISE_APPLICATION_ERROR(-20002, 'Az utas születési ideje nem lehet később mint az aktuális dátum ' || to_char(utas_szulido_limit, 'YYYY-MM-DD'));
-    END IF;
+  IF :new.meret IS NOT NULL AND NOT REGEXP_LIKE(:new.meret,v_pattern) THEN
+    RAISE_APPLICATION_ERROR(-20001, 'Az adat formátuma nem megfelelő. Kérem, használjon például 20x20x20 formátumot.');
+  END IF;
 END;
 /
+
