@@ -23,7 +23,7 @@ searchBox();
                 <div class="column is-four-fifths">
                     <div class="flight">
                         <div class="badge"><?= $jarat["INDULASI_DATUM"] ?></div>
-                        <span class="airline-brand"><img width="50" style="margin-left: 15px" src="<?php echo (isset($jarat["LOGO"]) || !is_null($jarat["LOGO"])) ? "uploads/" . $jarat["LOGO"] : "img/missing_logo.png"; ?>"></span>
+                        <span class="airline-brand"><img width="50" style="margin-left: 15px" src="<?php echo (isset($jarat["LOGO"])) ? "uploads/" . $jarat["LOGO"] : "img/missing_image.png"; ?>"></span>
                         <div class="flight-inner">
                             <div class="flight-from">
                                 <div class="time"><?= $jarat["INDULASI_IDO"] ?></div>
